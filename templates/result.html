@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Plant Disease Prediction</title>
+    <style>
+        body { font-family: 'Roboto', Arial, sans-serif; margin: 0; padding: 0; height: 100vh; display: flex; justify-content: center; align-items: center; background-color: #ffffff; }
+        header { background-color: #ffffff; padding: 15px 0; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); text-align: center; }
+        header a { margin: 0 20px; text-decoration: none; color: #333; font-weight: 600; font-size: 18px; cursor: pointer; }
+        
+        .search-box {
+            display: none;
+            margin-top: 20px;
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .search-box input, .search-box select {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 250px;
+        }
+
+        .search-box button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            transition: transform 0.2s;
+        }
+        
+        .search-box button:hover {
+            transform: scale(1.05);
+            background: linear-gradient(to right, #feb47b, #ff7e5f);
+        }
+    </style>
+    <script>
+        function showSearch() {
+            var searchBox = document.getElementById("searchBox");
+            if (searchBox.style.display === "none" || searchBox.style.display === "") {
+                searchBox.style.display = "flex"; // 검색 창 보이게
+            }
+        }
+
+        function searchPlant() {
+            const plantName = document.getElementById("plantName").value.toLowerCase(); // 텍스트를 소문자로 변환
+            const plantResultMapping = {
+                "apple": "apple.html",
+                "bean": "been.html",
+                "bellpepper": "bellpepper.html",
+                "blueberry": "blueberry.html",
+                "corn": "corn.html",
+                "ginger": "ginger.html",
+                "grapes": "grapes.html",
+                "lemon": "lemon.html",
+                "onion": "onion.html",
+                "peach": "peach.html",
+                "raspberry": "raspberry.html",
+                "rice": "rice.html",
+                "strawberry": "strawberry.html",
+                "tomato": "tomato.html",
+                "orange": "orange.html"
+            };
+
+            if (plantName && plantResultMapping[plantName]) {
+                // 디버깅: URL이 제대로 설정되었는지 확인
+                console.log("Redirecting to: /result/plant_result/" + plantResultMapping[plantName]);
+                window.location.href = "/result/plant_result/" + plantResultMapping[plantName];
+            } else {
+                alert("Plant not found! Please enter a valid plant name.");
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <a href="/">Home</a>
+        <a href="/capture">LeafAI</a>
+        <a href="/cctv">CCTV</a>
+        <a href="javascript:void(0);" onclick="showSearch()">Plant Information</a>
+    </header>
+
+    <div id="searchBox" class="search-box">
+        <input type="text" id="plantName" placeholder="Enter Plant Name or Select a Plant" list="plantList">
+        
+        <datalist id="plantList">
+            <option value="Apple">
+            <option value="Bean">
+            <option value="Bell Pepper">
+            <option value="Blueberry">
+            <option value="Corn">
+            <option value="Cucumber">
+            <option value="Ginger">
+            <option value="Grapes">
+            <option value="Lemon">
+            <option value="Lettuce">
+            <option value="Onion">
+            <option value="Peach">
+            <option value="Raspberry">
+            <option value="Rice">
+            <option value="Strawberry">
+            <option value="Tomato">
+        </datalist>
+
+        <button onclick="searchPlant()">Search</button>
+    </div>
+</body>
+</html>

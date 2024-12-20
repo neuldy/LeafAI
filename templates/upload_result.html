@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <style>
+        body { font-family: 'Roboto', Arial, sans-serif; margin: 0; padding: 20px; background-color: #f4f4f4; }
+        .container { max-width: 800px; margin: 50px auto; padding: 20px; background: #fff; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+        h1 { color: #333; }
+        img { max-width: 100%; height: auto; margin-top: 20px; border-radius: 10px; }
+        .result { margin-top: 20px; padding: 15px; background: #f9f9f9; border-radius: 10px; }
+        .result p { margin: 0; font-size: 18px; color: #555; }
+        .result .highlight { font-weight: bold; color: #333; }
+        .back-btn { display: inline-block; margin-top: 20px; padding: 10px 20px; background: #333; color: #fff; text-decoration: none; border-radius: 5px; }
+        .back-btn:hover { background: #555; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Prediction Result</h1>
+        <img src="{{ filepath }}" alt="Uploaded Image">
+        <div class="result">
+            <p><span class="highlight">Plant and Disease:</span> {{ result }}</p>
+            <p><span class="highlight">Confidence:</span> {{ confidence }}</p>
+        </div>
+        <a href="/upload" class="back-btn">Go Back</a>
+    </div>
+</body>
+</html>

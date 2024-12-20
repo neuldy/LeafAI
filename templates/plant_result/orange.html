@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>콩(대두)</title>
+   <style>
+        body { font-family: 'Roboto', Arial, sans-serif; margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; align-items: center; background-color: #ffffff; }
+        header { background-color: #ffffff; padding: 15px 0; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); text-align: center; }
+        header a { margin: 0 20px; text-decoration: none; color: #333; font-weight: 600; font-size: 18px; }
+        .container { margin-top: 100px; width: 80%; max-width: 1200px; text-align: left; display: flex; gap: 20px; }
+        .image-box { flex: 1; display: flex; justify-content: flex-end; }
+        .image-box img { max-width: 300px; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+        .description-box { flex: 2; background: #f9f9f9; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+        .description-box h2 { font-size: 24px; color: #333; margin-bottom: 10px; }
+        .description-box p { font-size: 16px; color: #555; line-height: 1.6; }
+        .info-container { display: flex; gap: 20px; width: 80%; margin-top: 20px; }
+        .info-section { flex: 1; background: #f9f9f9; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+        .info-section h3 { font-size: 20px; color: #333; margin-bottom: 10px; display: flex; align-items: center; }
+        .info-section h3 img { width: 24px; height: 24px; margin-right: 10px; }
+        .info-section table { width: 100%; border-collapse: collapse; }
+        .info-section table td, .info-section table th { border: 1px solid #ddd; padding: 8px; }
+        .info-section table th { background-color: #f2f2f2; font-weight: bold; }
+        .tabs { display: flex; justify-content: space-around; margin-bottom: 10px; }
+        .tab { cursor: pointer; padding: 10px 20px; border: 1px solid #ddd; border-radius: 5px; background-color: #f9f9f9; }
+        .tab.active { background-color: #333; color: #fff; }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .scroll-container { display: flex; overflow-x: auto; gap: 20px; padding: 10px; }
+        .scroll-item { flex: 0 0 auto; width: 100px; text-align: center; transition: transform 0.3s ease; }
+        .scroll-item:hover { transform: translateY(-5px); }
+        .scroll-item img { width: 100px; height: 100px; border-radius: 5px; object-fit: cover; margin-bottom: 5px; }
+        .scroll-item p { font-size: 14px; color: #333; margin: 0; }
+        .disease-info { display: none; background: #f9f9f9; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); margin-top: 20px; }
+        .disease-info h4 { margin: 0 0 10px; color: #333; }
+        .disease-info h4 { margin: 0 0 10px; color: #333; }
+        .disease-info h4 span { font-weight: bold; color: orange; }
+        .disease-info p { margin: 10px 0; }
+        .disease-info hr { border: 1px solid #ddd; margin: 15px 0; }
+        .disease-info .control-section { font-weight: bold; margin-bottom: 10px; }
+        .back-button { margin-top: 10px; padding: 10px 20px; background-color: #333; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
+        .back-button:hover { background-color: #555; }
+        .color-circle { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 10px; float: left;  }     
+</style>
+
+    </style>
+    <script>
+        function showDiseaseInfo(diseaseName) {
+            const diseaseDescriptions = {
+                '깨씨무늬병': {
+                    description: '깨씨무늬병은 잎에서 갈색을 띤 작은 반점으로 나타난다. 병이 진전되면 방추형 혹은 타원형 병반으로 확대되며 병반은 암갈색으로 변한다. 아래 잎부터 발생하여 점차 위 잎으로 올라가며 퍼진다. 옥수수의 생육 후기에 온도가 높고 비가 많이 올 때 병 발생이 심하며 우리나라 중·남부 평야지에서 많이 발생한다.',
+                    control: '적절한 환기를 유지하고 병든 잎을 제거하십시오.'
+                },
+                '상처': {
+                    description: '상처는 물리적 손상으로 인해 발생하며 병균이 침투할 수 있습니다.',
+                    control: '상처 부위를 소독하고 필요 시 보호제를 사용하십시오.'
+                },
+                // 다른 병해 데이터 추가 가능
+            };
+
+            const container = document.querySelector('.scroll-container');
+            const infoBox = document.querySelector('.disease-info');
+
+            container.style.display = 'none';
+            infoBox.style.display = 'block';
+
+             const data = diseaseDescriptions[diseaseName];
+            infoBox.innerHTML = `
+                <h4><span>|</span> ${diseaseName}</h4>
+                <p>${data.description}</p>
+                <hr>
+                <div class="control-section">▶ 방제법</div>
+                <p>${data.control}</p>
+                <button class="back-button" onclick="showDiseaseList()">돌아가기</button>
+            `;
+        }
+
+        function showDiseaseList() {
+            const container = document.querySelector('.scroll-container');
+            const infoBox = document.querySelector('.disease-info');
+
+            container.style.display = 'flex';
+            infoBox.style.display = 'none';
+        }
+        function showTab(tabIndex) {
+            const tabs = document.querySelectorAll('.tab');
+            const contents = document.querySelectorAll('.tab-content');
+
+            tabs.forEach((tab, index) => {
+                tab.classList.toggle('active', index === tabIndex);
+            });
+
+            contents.forEach((content, index) => {
+                content.classList.toggle('active', index === tabIndex);
+            });
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <a href="/">Home</a>
+        <a href="/capture">LeafAI</a>
+        <a href="/cctv">CCTV</a>
+        <!-- 'Plant Information' 클릭 시 /result로 리디렉션되도록 수정 -->
+        <a href="/result">Plant Information</a>
+    </header>
+    
+    <div class="container">
+        <!-- 오른쪽 위에 이미지를 배치 -->
+        <div class="image-box">
+            <img src="{{ image_path }}" alt="Analyzed Plant Image">
+        </div>
+        <!-- 왼쪽에 설명을 표시 -->
+        <div class="description-box">
+            <h2>Prediction Result</h2>
+            <p><strong>Plant and Disease:</strong> {{ result }}</p>
+        </div>
+    </div>    
+
+    <!-- 추가 섹션 -->
+    <div class="info-container">
+        <div class="info-section" style="flex: 1;">
+            <h3><img src="/static/img/Key facts.png" alt="Key Facts Icon">학명 분류</h3>
+            <table>
+                <tr>
+                    <th>분류</th>
+                    <th>정보</th>
+                </tr>
+                <tr>
+                    <td>속(屬)</td>
+                    <td><i><b>Glycine</b></i> - 콩속</td>
+                </tr>
+                <tr>
+                    <td>과(科)</td>
+                    <td><b>Fabaceae</b>- 콩과</td>
+                </tr>
+                <tr>
+                    <td>목(目)</td>
+                    <td><b>Fabales</b> - 콩목</td>
+                </tr>
+                <tr>
+                    <td>강(綱)</td>
+                    <td><b>Magnoliopsida</b> - 목련강, 속씨식물문</td>
+                </tr>
+                <tr>
+                    <td>문(門)</td>
+                    <td><b>Tracheophyta</b> - 관속식물, 관다발식물</td>
+                </tr>
+            </table>
+        </div>
+        <div class="info-section" style="flex: 1;">
+            <h3><img src="/static/img/Key facts.png" alt="Key Facts Icon">설명</h3>
+            <p>콩(Glycine max)은 동아시아에서 중요한 작물로 오래전부터 경작되었다.<br>
+                한국에는 기원전 1000년경에 재배된 것으로 알려져 있다. 속명은 달콤함을 듯하는 그리스어 glykos에서 유래했다.<br>
+                콩은 상당량의 식이 미네랄, 비타민 B 등을 함유하고 있다. 농장 가축에겐 중요한 단백질 공급원이다.<br>
+                박데리아, 곰팡이, 기생균 등에 취약하다.</p>
+        </div>
+    </div>
+
+    <!-- 주요 사실과 특징 섹션 -->
+    <div class="info-container">
+        <div class="info-section" style="flex: 1;">
+            <h3><img src="/static/img/Key facts.png" alt="Key Facts Icon">주요 사실</h3>
+            <table>
+                <tr>
+                    <th>Attribute</th>
+                    <th>Details</th>
+                </tr>
+                <tr>
+                    <td>잡초 여부</td>
+                    <td>잡초로 보고되지 않음</td>
+                </tr>
+                <tr>
+                    <td>침입성</td>
+                    <td>침입성으로 보고되지 않음</td>
+                </tr>
+                <tr>
+                    <td>종류</td>
+                    <td>허브</td>
+                </tr>
+                <tr>
+                    <td>수명</td>
+                    <td>일년생</td>
+                </tr>
+                <tr>
+                    <td>재배 시기</td>
+                    <td>봄, 초여름</td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="info-section" style="flex: 1;">
+            <h3><img src="/static/img/새싹.png" alt="Key Facts Icon">특징</h3>
+            <div class="tabs">
+                <div class="tab active" onclick="showTab(0)">다 자란 식물</div>
+                <div class="tab" onclick="showTab(1)">꽃</div>
+                <div class="tab" onclick="showTab(2)">열매</div>
+            </div>
+            <div class="tab-content active">
+                <table>
+                    <tr>
+                        <th>Attribute</th>
+                        <th>Details</th>
+                    </tr>
+                    <tr>
+                        <td>식물 높이</td>
+                        <td>61 ~ 183 cm</td>
+                    </tr>
+                    <tr>
+                        <td>꼭대기 지름</td>
+                        <td>30 ~ 38 cm</td>
+                    </tr>
+                    <tr>
+                        <td>잎 색깔</td>
+                        <td>
+                            <span class="color-circle" style="background-color: green;"></span>
+                        </td>
+                        
+                    </tr>
+                </table>
+            </div>
+            <div class="tab-content">
+                <table>
+                    <tr>
+                        <th>Attribute</th>
+                        <th>Details</th>
+                    </tr>
+                    <tr>
+                        <td>개화 시기</td>
+                        <td>늦은 봄, 초여름, 한여름</td>
+                    </tr>
+                    <tr>
+                        <td>꽃 지름</td>
+                        <td>2.5cm</td>
+                    </tr>
+                    <tr>
+                        <td>꽃 색깔</td>
+                        <td>흑색</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="tab-content">
+                <table>
+                    <tr>
+                        <th>Attribute</th>
+                        <th>Details</th>
+                    </tr>
+                    <tr>
+                        <td>수확 시기</td>
+                        <td>여름, 가을</td>
+                    </tr>
+                    <tr>
+                        <td>과일 색</td>
+                        <td>보라색</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+<!-- 병해충 및 질병과 흥미로운 사실 섹션 -->
+<div class="info-container">
+    <div class="info-section" style="flex: 1;">
+        <h3><img src="/static/img/disease.png" alt="Disease Icon">병해충 및 질병</h3>
+        <div class="scroll-container">
+            <div class="scroll-item" onclick="showDiseaseInfo('깨씨무늬병')">
+                <img src="/static/img/corn/corn_disease1.jpg" alt="Disease 1">
+                <p>잎벌레</p>
+            </div>
+            <div class="scroll-item">
+                <img src="/static/img/disease2.png" alt="Disease 2">
+                <p>롱혼 딱정벌레</p>
+            </div>
+            <div class="scroll-item">
+                <img src="/static/img/disease3.png" alt="Disease 3">
+                <p>애벌레</p>
+            </div>
+            <div class="scroll-item">
+                <img src="/static/img/disease4.png" alt="Disease 4">
+                <p>과일 시들음</p>
+            </div>
+            <div class="scroll-item">
+                <img src="/static/img/disease5.png" alt="Disease 5">
+                <p>수액 흡수 곤충</p>
+            </div>
+            <div class="scroll-item">
+                <img src="/static/img/disease6.png" alt="Disease 6">
+                <p>열매 썩음병</p>
+            </div>
+            <div class="scroll-item">
+                <img src="/static/img/disease7.png" alt="Disease 7">
+                <p>갈색 반점</p>
+            </div>
+        </div>
+        <div class="disease-info"></div>
+    </div>
+    <div class="info-section" style="flex: 1;">
+        <h3><img src="/static/img/facts.png" alt="Interesting Facts Icon">흥미로운 사실</h3>
+        <p>옥수수는 세계에서 가장 널리 재배되는 작물 중 하나로, 다양한 기후와 환경에서 자랄 수 있는 강한 적응력을 가지고 있습니다. 옥수수의 품종은 수백 가지에 달하며, 이는 다양한 용도와 환경 요구를 충족시키기 위해 개발되었습니다.</p>
+    </div>
+</div>
+
+</body>
+</html>

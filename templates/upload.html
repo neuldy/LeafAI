@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Plant Image</title>
+    <style>
+        body { font-family: 'Roboto', Arial, sans-serif; margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; align-items: center; background-color: #ffffff; }
+        header { background-color: #ffffff; padding: 15px 0; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); text-align: center; }
+        header a { margin: 0 20px; text-decoration: none; color: #333; font-weight: 600; font-size: 18px; }
+        .container { text-align: center; margin-top: 100px; } /* 컨텐츠를 아래로 내리기 */
+        .title { font-size: 36px; font-weight: 700; color: #333; margin: 10px 0; }
+        .subtitle { font-size: 18px; color: #666; margin-bottom: 30px; }
+        .file-upload { margin: 30px; padding: 20px; background: #f9f9f9; border-radius: 15px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); display: inline-block; }
+        .file-upload input[type="file"] { margin-bottom: 20px; }
+        .submit-btn { background: linear-gradient(to right, #ff7e5f, #feb47b); border: none; color: white; padding: 10px 20px; border-radius: 30px; cursor: pointer; font-size: 16px; transition: transform 0.2s; }
+        .submit-btn:hover { transform: scale(1.05); background: linear-gradient(to right, #feb47b, #ff7e5f); }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/">Home</a>
+        <a href="/upload">LeafAI</a>
+        <a href="#">CCTV</a>
+        <a href="#">Plant Information</a>
+    </header>
+    <div class="container">
+        <h1 class="title">Detect Disease</h1>
+        <p class="subtitle">Upload an image of a plant leaf for disease detection</p>
+        <div class="file-upload">
+            <form action="/upload" method="POST" enctype="multipart/form-data">
+                <input type="file" name="file" accept="image/*" required>
+                <br>
+                <button type="submit" class="submit-btn">Submit</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

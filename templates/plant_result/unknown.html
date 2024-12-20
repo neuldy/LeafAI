@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+</head>
+<body>
+    <div class="container">
+        <!-- 오른쪽 위에 이미지를 배치 -->
+        <div class="image-box">
+            <img src="{{ filepath }}" alt="Uploaded or Captured Image" style="max-width: 300px; border-radius: 10px;">
+        </div>
+        <!-- 왼쪽에 설명을 표시 -->
+        <div class="description-box">
+            <h2>Prediction Result</h2>
+            <p><strong>Plant and Disease:</strong> {{ result }}</p>
+            <p><strong>Confidence:</strong> {{ confidence }}</p>
+        </div>
+    </div>
+</body>
+</html>

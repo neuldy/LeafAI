@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Capture Page</title>
+    <style>
+        body { font-family: 'Roboto', Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f9; }
+        header { background-color: #ffffff; padding: 15px 0; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); text-align: center; }
+        header a { margin: 0 20px; text-decoration: none; color: #333; font-weight: 600; font-size: 18px; cursor: pointer; }
+        .container { text-align: center; padding-top: 100px; }
+        .capture-img { width: 200px; height: auto; cursor: pointer; transition: transform 0.3s, box-shadow 0.3s; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); }
+        .capture-img:hover { transform: scale(1.1); box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); }
+        .title { font-size: 36px; font-weight: bold; color: #333; margin-bottom: 20px; }
+        .subtitle { font-size: 16px; color: #666; margin-bottom: 40px; }
+        .back-btn { background: linear-gradient(to right, #ff7e5f, #feb47b); border: none; color: white; padding: 12px 35px; border-radius: 25px; font-size: 16px; cursor: pointer; transition: transform 0.3s, background 0.3s; text-decoration: none; display: inline-block; margin-top: 30px; }
+        .back-btn:hover { transform: scale(1.1); background: linear-gradient(to right, #feb47b, #ff7e5f); box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/">Home</a>
+        <a href="/capture">LeafAI</a>
+        <a href="/cctv">CCTV</a>
+        <a href="/search">Plant Information</a>
+    </header>
+    <div class="container">
+        <h1 class="title">Capture Image</h1>
+        <p class="subtitle">Click the image below to capture a photo using the LeafAI system.</p>
+        <form action="/capture" method="post">
+            <button type="submit" style="border: none; background: none; padding: 0;">
+                <img src="/static/img/picture.jpg" alt="Capture Image" class="capture-img">
+            </button>
+        </form>
+        <br>
+        <a href="{{ url_for('home') }}" class="back-btn">홈으로 돌아가기</a>
+    </div>
+</body>
+</html>
