@@ -1,0 +1,23 @@
+[
+    {
+        "crop_name": "상추추추",
+        "date": "2024-12-20",
+        "watering": "많이주기",
+        "weather": "흐림",
+        "notes": "기타"
+    },
+    {
+        "temperature": "36.07",
+        "ppfd": "230.21",
+        "water": "많음",
+        "humidity": "80%",
+        "notes": "메모.."
+    },
+    {
+        "temperature": "36.09",
+        "ppfd": "230.21",
+        "water": "ㅁ",
+        "humidity": "ㅁ",
+        "notes": "ㅁ"
+    }
+]

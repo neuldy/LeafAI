@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sensor Data</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f7f7f7;
+            color: #333;
+        }
+        .container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #4CAF50;
+            text-align: center;
+        }
+        .data {
+            font-size: 18px;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            background: #f0f8ff;
+            color: #333;
+        }
+        .data span {
+            font-weight: bold;
+            color: #4CAF50;
+        }
+        .btn-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+        .home-btn {
+            background: linear-gradient(to right, #4CAF50, #43A047);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s, background 0.3s;
+        }
+        .home-btn:hover {
+            transform: translateY(-3px);
+            background: linear-gradient(to right, #43A047, #4CAF50);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">Current Sensor Data</div>
+        <div class="data">
+            <span>Temperature:</span> {{ temperature }} °C
+        </div>
+        <div class="data">
+            <span>PPFD:</span> {{ ppfd }} μmol/m²/s
+        </div>
+        <div class="btn-container">
+            <a href="/" class="home-btn">Go to Home</a>
+        </div>
+    </div>
+</body>
+</html>

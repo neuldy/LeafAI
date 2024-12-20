@@ -102,29 +102,42 @@
 <body>
     <header>
         <a href="/">Home</a>
-        <a href="/upload">LeafAI</a>
-        <a href="#">CCTV</a>
-        <a href="#">Plant Information</a>
+        <a href="/capture">LeafAI</a>
+        <a href="/cctv">CCTV</a>
+        <a href="/search">Plant Information</a>
+        <a href="/view_growth_logs">Blog</a>
     </header>
     <div class="container">
-        <!-- 오른쪽 위에 이미지를 배치 -->
         <div class="image-box">
-            <img src="{{ filepath }}" alt="Uploaded Plant Image">
+            <!-- Check if filepath exists, if so, display uploaded image -->
+            {% if filepath %}
+                <img src="{{ filepath }}" alt="Uploaded Plant Image">
+            {% else %}
+                <!-- If filepath is not available, use the default image from /static/img/apple/ -->
+                <img src="{{ url_for('static', filename='img/apple/apple.jpg') }}" alt="Plant Image">
+            {% endif %}
         </div>
-
-        <!-- 왼쪽에 설명을 표시 -->
-<div class="description-box">
-    <div style="display: flex; align-items: center; margin-bottom: 10px;">
-        <img src="/static/img/corn/corn_icon.png" alt="corn_icon" style="width:20px; height:20px; margin-right:10px;">
-        <h2 style="margin: 0;">LeafAI 결과</h2>
-    </div>
-    <p style="margin: 0;">
-        <strong>Plant and Disease:</strong> {{ result }}
-    </p>
-    <p style="margin: 0;">
-        <strong>Confidence:</strong> {{ confidence | default(0) * 100 | round(2) }}%
-    </p>
-</div>
+        <div class="description-box">
+            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+                <img src="/static/img/corn/corn_icon.png" alt="corn_icon" style="width:20px; height:20px; margin-right:10px;">
+                <h2 style="margin: 0;">LeafAI 결과</h2>
+            </div>
+        
+            {% if result == crop %}
+                <p style="margin: 0;">
+                    <strong>Plant:</strong> {{ crop }} <!-- Only show crop name when no result -->
+                </p>
+            {% else %}
+                <p style="margin: 0;">
+                    <strong>Plant and Disease:</strong> {{ result }}
+                </p>
+                <p style="margin: 0;">
+                    <strong>Confidence:</strong> {{ confidence | default(0) | round(2) }}%
+                </p>
+            {% endif %}
+        </div>
+        
+        
 </div>
     </div>
 

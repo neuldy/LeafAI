@@ -7,7 +7,7 @@
     <style>
         body { font-family: 'Roboto', Arial, sans-serif; margin: 0; padding: 0; height: 100vh; display: flex; justify-content: center; align-items: center; background-color: #ffffff; }
         header { background-color: #ffffff; padding: 15px 0; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); text-align: center; }
-        header a { margin: 0 20px; text-decoration: none; color: #333; font-weight: 600; font-size: 18px; cursor: pointer; }
+        header a { margin: 0 20px; text-decoration: none; color: #333; font-weight: 600; font-size: 18px; }
         .container { text-align: center; }
         .title { font-size: 36px; font-weight: 700; color: #333; margin: 10px 0; }
         .subtitle { font-size: 18px; color: #666; margin-bottom: 30px; }
@@ -18,90 +18,10 @@
         .icon-box:hover { transform: translateY(-10px); box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); }
         .icon-box img { width: 90px; height: 90px; margin-bottom: 10px; }
         .icon-box p { font-size: 14px; color: #555; margin: 0; }
-        /* 검색 창 스타일 */
-        .search-box { display: none; margin-top: 20px; text-align: center; }
-        .search-box input { padding: 10px; font-size: 16px; margin-right: 10px; border-radius: 5px; border: 1px solid #ccc; }
-        .search-box button { padding: 10px 20px; font-size: 16px; cursor: pointer; background-color: #4CAF50; color: white; border: none; border-radius: 5px; }
-        .search-box button:hover { background-color: #45a049; }
-        
-        /* 달력 스타일 */
-        .calendar-container { position: fixed; bottom: 20px; right: 20px; }
-        .calendar-icon { 
-            width: 60px; /* 동그라미 크기 줄임 */
-            height: 60px; /* 동그라미 크기 줄임 */
-            border-radius: 50%; 
-            background-color: #ffffff; 
-            border: 2px solid #ddd; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            cursor: pointer; 
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-        }
-        .calendar-icon svg { 
-            width: 30px; /* 아이콘 크기 줄임 */
-            height: 30px; /* 아이콘 크기 줄임 */
-            fill: #000000; /* 아이콘 색상 */
-        }
-        .mini-calendar { 
-            display: none; 
-            position: absolute; 
-            bottom: 70px; 
-            right: 0; 
-            background: white; 
-            border: 1px solid #ddd; 
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); 
-            border-radius: 10px; 
-            padding: 10px; 
-            z-index: 1000; 
-        }
+        /* 카메라 영상 표시 스타일 */
+        .camera-container { margin-top: 50px; }
+        .camera-container video { border: 2px solid #ddd; border-radius: 10px; width: 80%; max-width: 640px; height: auto; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); }
     </style>
-   <script>
-    // 검색 창을 표시하는 함수
-    function showSearch() {
-        document.getElementById("searchBox").style.display = "block";
-    }
-
-    // 검색된 값에 따라 결과 페이지로 이동하는 함수
-    function searchPlant() {
-        const plantName = document.getElementById("plantName").value.toLowerCase();  // Convert to lowercase for consistency
-        const plantResultMapping = {
-            "apple": "apple_result.html",
-            "bean": "been_result.html",
-            "bellpepper": "bellpepper_result.html",
-            "blueberry": "blueberry_result.html",
-            "corn": "corn_result.html",
-            "cucumber": "cucumber_result.html",
-            "ginger": "ginger_result.html",
-            "grapes": "grapes_result.html",
-            "lemon": "lemon_result.html",
-            "lettuce": "lettuce_result.html",
-            "onion": "onion_result.html",
-            "peach": "peach_result.html",
-            "raspberry": "raspberry_result.html",
-            "rice": "rice_result.html",
-            "strawberry": "strawberry_result.html",
-            "tomato": "tomato_result.html"
-        };
-
-        if (plantName && plantResultMapping[plantName]) {
-            // Use the mapping to redirect to the correct result page
-            window.location.href = "/result/plant_result/" + plantResultMapping[plantName];
-        } else {
-            alert("Plant not found! Please enter a valid plant name.");
-        }
-    }
-
-    // 달력 표시/숨김
-    function toggleCalendar() {
-        const calendar = document.getElementById('miniCalendar');
-        if (calendar.style.display === 'block') {
-            calendar.style.display = 'none';
-        } else {
-            calendar.style.display = 'block';
-        }
-    }
-</script>
 </head>
 <body>
     <header>
@@ -109,6 +29,7 @@
         <a href="/capture">LeafAI</a>
         <a href="/cctv">CCTV</a>
         <a href="/search">Plant Information</a>
+        <a href="/view_growth_logs">Blog</a>
     </header>
     <div class="container">
         <h1 class="title">PLANT DISEASE PREDICTION</h1>
@@ -133,29 +54,7 @@
             </div>
         </div>
 
-        <!-- 검색 박스 -->
-        <div id="searchBox" class="search-box">
-            <input type="text" id="plantName" placeholder="Enter Plant Name">
-            <button onclick="searchPlant()">Search</button>
-        </div>
-    </div>
 
-    <!-- 달력 -->
-    <div class="calendar-container">
-        <div class="calendar-icon" onclick="toggleCalendar()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" fill="currentColor" class="bi bi-calendar-plus" viewBox="0 0 16 16">
-                <path d="M8 7a.5.5 0 0 1 .5.5V9H10a.5.5 0 0 1 0 1H8.5v1.5a.5.5 0 0 1-1 0V10H6a.5.5 0 0 1 0-1h1.5V7.5A.5.5 0 0 1 8 7"/>
-                <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
-            </svg>
-        </div>
-        <div id="miniCalendar" class="mini-calendar">
-            <iframe src="https://calendar.google.com/calendar/embed?mode=month&showTitle=1&showNav=1&showDate=1&showPrint=0&showTabs=0" 
-                style="border:0; width: 300px; height: 300px;" 
-                frameborder="0" 
-                scrolling="no">
-            </iframe>
-        </div>
-        
     </div>
 </body>
 </html>

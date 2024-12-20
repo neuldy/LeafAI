@@ -1,2 +1,6 @@
 yolov5/
 models/
+.idea/
+__pycache__/
+venv/
+yolov5s.pt

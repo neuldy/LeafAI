@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, Response
+from flask import Flask, render_template, request, redirect, url_for, Response, jsonify
 import os
 import json
 from tensorflow.keras.models import load_model
@@ -110,92 +110,128 @@ def upload():
         except Exception as e:
             return f"Error during upload: {str(e)}", 500
 
-
 @app.route('/capture', methods=['GET', 'POST'])
 def capture():
     initialize_camera()  # Picamera2 초기화
-    if request.method == 'GET':
-        return render_template('capture.html')
-    elif request.method == 'POST':
+    if request.method == 'POST':
         try:
-            # 파일 저장 경로 설정
+            # 이미지 캡처 및 저장
             timestamp = int(time.time())
             filename = f"captured_{timestamp}.jpg"
             save_dir = os.path.join("static", "captures")
             os.makedirs(save_dir, exist_ok=True)
             filepath = os.path.join(save_dir, filename)
 
-            # 이미지 캡처 및 저장
             with camera_lock:
                 picam2.capture_file(filepath)
 
-            print(f"[INFO] Image successfully saved to: {filepath}")
-
-            # 예측 실행 및 키워드 추출
+            # 예측 및 결과 처리
             result, confidence = predict_and_send(filepath)
 
-            # 신뢰도가 낮아 No Data인 경우 unknown.html로 이동
-            if result == "No Data":
-                return redirect(url_for('plant_result', crop='unknown'))
+            if confidence < 0.25:
+                return redirect(url_for('capture_result', result="No Data", filepath=filepath))
 
             crop = extract_keyword(result)
 
             # 결과 페이지로 리디렉션
             return redirect(
-                url_for('plant_result', crop=crop, filepath=url_for('static', filename=f'captures/{filename}'), result=result, confidence=f"{confidence:.2f}")
+                url_for('capture_result', result=result, filepath=url_for('static', filename=f'captures/{filename}'), confidence=f"{confidence:.2f}")
             )
+
         except Exception as e:
-            print(f"[ERROR] Error during image capture: {str(e)}")
-            return f"Error during image capture: {str(e)}"
+            return f"Error during image capture: {str(e)}", 500
+    return render_template('capture.html')  # GET 요청일 경우 capture 페이지를 반환
+
+
+@app.route('/capture_result')
+def capture_result():
+    result = request.args.get('result')
+    filepath = request.args.get('filepath')
+    confidence = float(request.args.get('confidence'))
+
+    # If confidence is below threshold (e.g., 0.4 or 40%), show "No Data" page
+    if confidence < 0.4:
+        return render_template('capture_result.html', result="No Data", filepath=filepath, confidence=None)
+
+    # If confidence is above threshold, redirect to specific crop page
+    crop = extract_keyword(result)  # Extract the crop keyword (e.g., 'cabbage', 'tomato')
+    
+    # Ensure the filepath and result are passed correctly
+    return redirect(url_for('plant_result', crop=crop, filepath=filepath, result=result, confidence=f"{confidence:.2f}"))
+
 
 @app.route('/plant_result/<crop>')
 def plant_result(crop):
     try:
-        # crop 값을 소문자로 변환
-        crop_lower = crop.lower()
-        filepath = request.args.get('filepath')  # 이미지 경로 (선택적)
-        result = request.args.get('result')  # 예측 결과 (선택적)
-        confidence = request.args.get('confidence')  # 신뢰도 (선택적)
+        crop_lower = crop.lower()  # Ensure crop name is in lowercase
+        filepath = request.args.get('filepath')  # Optional image path
+        result = request.args.get('result')  # Optional prediction result
+        confidence = request.args.get('confidence')  # Optional confidence value
 
-        # 디버깅 메시지 출력
         print(f"[DEBUG] crop_lower: {crop_lower}")
         print(f"[DEBUG] filepath: {filepath}")
         print(f"[DEBUG] result: {result}")
         print(f"[DEBUG] confidence: {confidence}")
 
-        # unknown.html로 리디렉션
-        if crop_lower == "unknown":
-            return render_template("plant_result/unknown.html")
+        # If no result, treat as the crop name
+        if not result:
+            result = crop  # Set result to crop name if no prediction is available
 
-        # 이미지 경로와 결과가 없는 경우(검색 요청)
-        if not filepath and not result and not confidence:
-            # 단순히 crop에 대한 HTML 페이지 렌더링
-            return render_template(f"plant_result/{crop_lower}.html")
+        # Default image handling
+        if not filepath:
+            filepath = url_for('static', filename=f'img/{crop_lower}/{crop_lower}.jpg')
 
-        # 이미지 경로와 결과가 있는 경우(예측 결과 페이지)
+        # Ensure confidence is a float
+        confidence_value = float(confidence) if confidence else 0.0
+        confidence_percentage = round(confidence_value * 100, 2)
+
+        # If 'No Data' result is detected, render a page showing only crop name
+        if result == "No Data":
+            return render_template("plant_result/unknown.html", crop=crop)
+
         return render_template(
             f"plant_result/{crop_lower}.html",
             filepath=filepath,
             result=result,
-            confidence=confidence
+            confidence=confidence_percentage
         )
+
     except Exception as e:
         print(f"[ERROR] Unable to load template for crop: {crop}. Details: {str(e)}")
         return f"Error: Unable to load the page for {crop}. Details: {str(e)}", 404
 
+import torch
+import cv2
+
 def generate_frames():
-    initialize_camera()  # Picamera2 초기화
+    initialize_camera()  # Initialize Picamera2
+
+    # Load YOLOv5 model (default model can be 'yolov5s', 'yolov5m', 'yolov5l', 'yolov5x')
+    model = torch.hub.load('ultralytics/yolov5', 'yolov5s')  # Load YOLOv5 small model
+
     while True:
-        with camera_lock:  # 락 사용
-            frame = picam2.capture_array()
+        with camera_lock:  # Use lock for thread safety
+            frame = picam2.capture_array()  # Capture frame from Pi Camera
+
+            # Perform object detection on the captured frame using YOLOv5
+            results = model(frame)  # Perform inference
+            print("[DEBUG] Detection Results:", results.pandas().xywh)  # Show detected objects info
+
+            # Render the results on the frame
+            frame = results.render()[0]  # Render the detection results on the frame
+
+            # Convert the frame to JPEG format
             ret, buffer = cv2.imencode('.jpg', frame)
             frame = buffer.tobytes()
+
+            # Yield the frame for streaming
             yield (b'--frame\r\n'
                    b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
 
 @app.route('/video_feed')
 def video_feed():
     return Response(generate_frames(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
 
 @app.route('/cctv')
 def cctv():
@@ -243,6 +279,15 @@ def predict(image_path):
         return predicted_class_name, confidence
     except Exception as e:
         raise ValueError(f"Prediction failed: {str(e)}")
+    
+arduino_port = '/dev/ttyUSB0'  # Update this to match your Arduino port
+baud_rate = 9600
+try:
+    arduino = serial.Serial(arduino_port, baud_rate, timeout=1)
+    time.sleep(2)  # Allow Arduino to reset
+except Exception as e:
+    print(f"[ERROR] Unable to connect to Arduino: {e}")
+    arduino = None
 
 def predict_and_send(image_path):
     try:
@@ -251,7 +296,7 @@ def predict_and_send(image_path):
         print(f"[DEBUG] Predicted class: {predicted_class_name}, Confidence: {confidence:.2f}")
 
         # 신뢰도가 낮아 No Data로 처리
-        if confidence < 0.25:
+        if confidence < 0.4:  # 40% 이하일 때 No Data 처리
             print("[DEBUG] Confidence below threshold. Treating as No Data.")
             send_to_arduino('Y')  # 노란불
             return "No Data", confidence
@@ -269,6 +314,177 @@ def predict_and_send(image_path):
         print(f"[ERROR] Prediction and Arduino communication failed: {e}")
         send_to_arduino('O')  # 모든 LED 끄기
         return "No Data", 0.0
+
+
+
+@app.route('/get_sensor_data', methods=['POST'])
+def get_sensor_data():
+    try:
+        if arduino:
+            arduino.write(b'S')  # Send 'S' to Arduino to request sensor data
+            time.sleep(1)
+            data = arduino.readline().decode('utf-8').strip()
+            if data:
+                return jsonify({"status": "success", "data": data})
+            else:
+                return jsonify({"status": "error", "message": "No data received from Arduino."})
+        else:
+            return jsonify({"status": "error", "message": "Arduino not connected."})
+    except Exception as e:
+        return jsonify({"status": "error", "message": str(e)})
+
+@app.route('/sensor_control', methods=['GET'])
+def sensor_control():
+    try:
+        if arduino:
+            arduino.write(b'S')  # Arduino로 센서 데이터 요청
+            time.sleep(1)
+            data = arduino.readline().decode('utf-8').strip()  # Arduino에서 데이터 수신
+            
+            print(f"[DEBUG] Raw data from Arduino: {data}")  # 디버깅용 출력
+
+            if data:
+                try:
+                    # 데이터 파싱
+                    # 예: "Temperature: 1212.40 °C, PPFD: 170.46 μmol/m²/s"
+                    parts = data.split(", ")
+                    temperature_part = parts[0].split(":")[1].strip().replace("°C", "").strip()
+                    ppfd_part = parts[1].split(":")[1].strip().replace("μmol/m²/s", "").strip()
+
+                    # 온도와 PPFD 값을 float으로 변환
+                    temperature = float(temperature_part)
+                    ppfd = float(ppfd_part)
+
+                    return render_template(
+                        'sensor_control.html',
+                        temperature=f"{temperature:.2f}",
+                        ppfd=f"{ppfd:.2f}"
+                    )
+                except (IndexError, ValueError) as parse_error:
+                    print(f"[ERROR] Data parsing failed: {parse_error}")
+                    return render_template(
+                        'sensor_control.html',
+                        temperature="Data Parsing Error",
+                        ppfd="Data Parsing Error"
+                    )
+            else:
+                return render_template('sensor_control.html', temperature="No Data", ppfd="No Data")
+        else:
+            return render_template('sensor_control.html', temperature="Arduino Not Connected", ppfd="N/A")
+    except Exception as e:
+        print(f"[ERROR] Exception occurred: {e}")
+        return render_template('sensor_control.html', temperature="Error", ppfd=str(e))
+
+
+GROWTH_LOG_FILE = 'growth_logs.json'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'bmp'}
+import datetime
+
+@app.route('/growth_log', methods=['GET', 'POST'])
+def growth_log():
+    try:
+        if arduino:
+            arduino.write(b'S')  # Send 'S' to Arduino to request sensor data
+            time.sleep(1)
+            data = arduino.readline().decode('utf-8').strip()
+            if data:
+                # Parse Arduino data, e.g., "Temperature: 25.50 °C, PPFD: 150.30 μmol/m²/s"
+                parts = data.split(", ")
+                temperature_part = parts[0].split(":")[1].strip().replace("°C", "").strip()
+                ppfd_part = parts[1].split(":")[1].strip().replace("μmol/m²/s", "").strip()
+                temperature = float(temperature_part)
+                ppfd = float(ppfd_part)
+            else:
+                temperature, ppfd = None, None
+        else:
+            temperature, ppfd = None, None
+
+    except Exception as e:
+        print(f"[ERROR] Failed to read from Arduino: {e}")
+        temperature, ppfd = None, None
+
+    if request.method == 'POST':
+        crop_name = request.form['crop_name']
+        # Remove the date handling here as we no longer need it
+        # We don't use date from the form anymore, as requested
+        watering = request.form['watering']
+        weather = request.form['weather']
+        notes = request.form['notes']
+
+        # Save the log entry with temperature and PPFD
+        growth_log_entry = {
+            'crop_name': crop_name,
+            'watering': watering,
+            'weather': weather,
+            'notes': notes,
+            'temperature': temperature,
+            'ppfd': ppfd
+        }
+
+        # Read or initialize growth logs
+        if os.path.exists(GROWTH_LOG_FILE):
+            with open(GROWTH_LOG_FILE, 'r', encoding='utf-8') as f:
+                growth_logs = json.load(f)
+        else:
+            growth_logs = []
+
+        growth_logs.append(growth_log_entry)
+
+        # Save updated logs
+        with open(GROWTH_LOG_FILE, 'w', encoding='utf-8') as f:
+            json.dump(growth_logs, f, ensure_ascii=False, indent=4)
+
+        return redirect(url_for('view_growth_logs'))
+
+    # Removed the logic for passing today's date to the template, since it's not needed
+    return render_template('growth_log.html', temperature=temperature, ppfd=ppfd)
+
+
+@app.route('/view_growth_logs')
+def view_growth_logs():
+    if os.path.exists(GROWTH_LOG_FILE):
+        with open(GROWTH_LOG_FILE, 'r', encoding='utf-8') as f:
+            growth_logs = json.load(f)
+    else:
+        growth_logs = []
+
+    return render_template('view_growth_logs.html', growth_logs=growth_logs)
+
+
+@app.route('/get_temperature', methods=['GET'])
+def get_temperature():
+    try:
+        if arduino:
+            arduino.write(b'S')  # Arduino로 데이터 요청
+            time.sleep(1)
+            data = arduino.readline().decode('utf-8').strip()  # Arduino에서 데이터 수신
+            print(f"[DEBUG] Raw data from Arduino: {data}")  # 디버깅용 출력
+
+            if data:
+                try:
+                    # 데이터 파싱
+                    # 예: "Temperature: 25.50 °C, PPFD: 150.30 μmol/m²/s"
+                    parts = data.split(", ")
+                    temperature_part = parts[0].split(":")[1].strip().replace("°C", "").strip()
+                    ppfd_part = parts[1].split(":")[1].strip().replace("μmol/m²/s", "").strip()
+
+                    # 온도와 조도 값을 float으로 변환
+                    temperature = float(temperature_part)
+                    ppfd = float(ppfd_part)
+
+                    # JSON 형태로 반환
+                    return jsonify({"temperature": f"{temperature:.2f} °C", "ppfd": f"{ppfd:.2f} μmol/m²/s"})
+                except (IndexError, ValueError) as parse_error:
+                    print(f"[ERROR] Data parsing failed: {parse_error}")
+                    return jsonify({"error": "Data parsing failed", "message": str(parse_error)}), 400
+            else:
+                return jsonify({"error": "No data received from Arduino"}), 400
+        else:
+            return jsonify({"error": "Arduino not connected"}), 500
+    except Exception as e:
+        print(f"[ERROR] Exception occurred: {e}")
+        return jsonify({"error": "An error occurred", "message": str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
