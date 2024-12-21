@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>생장일지 목록</title>
+    <div class="container"></div>
+
     <style>
         body {
             font-family: 'Roboto', Arial, sans-serif;
@@ -29,7 +30,7 @@
             font-size: 18px;
         }
         .container {
-            margin-top: 80px;
+            margin-top: 120px;
             padding: 20px;
             max-width: 800px;
             margin-left: auto;
@@ -42,6 +43,29 @@
             text-align: center;
             margin-bottom: 20px;
         }
+        .search-form {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .search-form input {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            width: 60%;
+        }
+        .search-form button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            background-color: #ff7e5f;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .search-form button:hover {
+            background-color: #feb47b;
+        }
         .log-card {
             border: 1px solid #ddd;
             padding: 20px;
@@ -49,6 +73,7 @@
             border-radius: 15px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             background-color: #ffffff;
+            position: relative;
         }
         .log-card h3 {
             font-size: 24px;
@@ -60,14 +85,19 @@
             color: #555;
             margin: 5px 0;
         }
-        .log-card .notes {
-            font-style: italic;
-            color: #777;
+        .highlight {
+            background-color: yellow;
+            font-weight: bold;
         }
-        .log-card .metadata {
-            font-size: 14px;
-            color: #999;
-            text-align: right;
+        .delete-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: red;
+            font-size: 20px;
         }
         .add-log-btn {
             position: fixed;
@@ -105,19 +135,28 @@
     <div class="container">
         <h1 class="title">생장일지 목록</h1>
 
+        <!-- 검색 폼 -->
+        <form class="search-form" method="GET" action="{{ url_for('view_growth_logs') }}">
+            <input type="text" name="q" placeholder="검색어를 입력하세요..." value="{{ search_query }}">
+            <button type="submit">검색</button>
+        </form>
+
         <!-- 생장일지 카드 목록 -->
         {% if growth_logs %}
             {% for log in growth_logs %}
-<div class="log-card">
-    <h3>{{ log.crop_name }} - {{ log.date }}</h3>
-    <p><strong>온도:</strong> {{ log.temperature }} °C</p>
-    <p><strong>빛의 양 (PPFD):</strong> {{ log.ppfd }} μmol/m²/s</p>
-    <p><strong>물의 양:</strong> {{ log.watering }}</p>
-    <p><strong>습도:</strong> {{ log.humidity }}%</p>
-    <p class="notes"><strong>메모:</strong> {{ log.notes }}</p>
-    <p class="metadata">작성일: {{ log.date }}</p>
-</div>
-
+            <div class="log-card">
+                <h3>{{ log.crop_name|highlight(search_query) }} - {{ log.date }}</h3>
+                <p><strong>온도:</strong> {{ log.temperature }} °C</p>
+                <p><strong>빛의 양 (PPFD):</strong> {{ log.ppfd }} μmol/m²/s</p>
+                <p><strong>물의 양:</strong> {{ log.watering }}</p>
+                <p><strong>습도:</strong> {{ log.humidity }}%</p>
+                <p class="notes"><strong>메모:</strong> {{ log.notes|highlight(search_query) }}</p>
+                <p class="metadata">작성일: {{ log.date }}</p>
+                <!-- 삭제 버튼 -->
+                <form action="{{ url_for('delete_growth_log', log_id=loop.index0) }}" method="POST" style="display: inline;">
+                    <button type="submit" class="delete-btn" title="삭제">×</button>
+                </form>
+            </div>
             {% endfor %}
         {% else %}
             <p style="text-align: center; color: #999;">등록된 생장일지가 없습니다.</p>

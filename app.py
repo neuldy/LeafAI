@@ -444,16 +444,28 @@ def growth_log():
     # Removed the logic for passing today's date to the template, since it's not needed
     return render_template('growth_log.html', temperature=temperature, ppfd=ppfd)
 
-
-@app.route('/view_growth_logs')
+@app.route('/view_growth_logs', methods=['GET'])
 def view_growth_logs():
+    search_query = request.args.get('q', '').strip()  # 검색어 가져오기
+    growth_logs = []
+
+    # JSON 파일에서 데이터 읽기
     if os.path.exists(GROWTH_LOG_FILE):
         with open(GROWTH_LOG_FILE, 'r', encoding='utf-8') as f:
             growth_logs = json.load(f)
-    else:
-        growth_logs = []
 
-    return render_template('view_growth_logs.html', growth_logs=growth_logs)
+    # 검색어가 있을 경우 필터링
+    if search_query:
+        filtered_logs = [
+            log for log in growth_logs
+            if search_query.lower() in log['crop_name'].lower() or
+               search_query.lower() in log['notes'].lower()
+        ]
+    else:
+        filtered_logs = growth_logs  # 검색어가 없으면 전체 데이터 사용
+
+    return render_template('view_growth_logs.html', growth_logs=filtered_logs, search_query=search_query)
+
 
 
 @app.route('/get_temperature', methods=['GET'])
@@ -489,6 +501,34 @@ def get_temperature():
     except Exception as e:
         print(f"[ERROR] Exception occurred: {e}")
         return jsonify({"error": "An error occurred", "message": str(e)}), 500
+
+@app.route('/delete_growth_log/<int:log_id>', methods=['POST'])
+def delete_growth_log(log_id):
+    if os.path.exists(GROWTH_LOG_FILE):
+        with open(GROWTH_LOG_FILE, 'r', encoding='utf-8') as f:
+            growth_logs = json.load(f)
+    else:
+        growth_logs = []
+
+    # 삭제할 로그를 제외한 나머지 로그만 저장
+    growth_logs = [log for idx, log in enumerate(growth_logs) if idx != log_id]
+
+    # 업데이트된 로그를 저장
+    with open(GROWTH_LOG_FILE, 'w', encoding='utf-8') as f:
+        json.dump(growth_logs, f, ensure_ascii=False, indent=4)
+
+    return redirect(url_for('view_growth_logs'))
+
+from markupsafe import Markup
+
+@app.template_filter('highlight')
+def highlight(text, search_query):
+    if not search_query:
+        return text
+    highlighted = text.replace(
+        search_query, f"<span class='highlight'>{search_query}</span>"
+    )
+    return Markup(highlighted)
 
 
 if __name__ == '__main__':
