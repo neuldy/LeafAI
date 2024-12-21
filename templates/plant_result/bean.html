@@ -44,30 +44,45 @@
     <script>
         function showDiseaseInfo(diseaseName) {
             const diseaseDescriptions = {
-                '흰가루병': {
-                    description: '흰가루병은 곰팡이에 의해 잎과 줄기에 흰 가루 같은 병반이 생기며, 고온다습한 환경에서 발병이 심화된다.',
+                '미이라병': {
+                    description: '미이라병은 곰팡이병으로 종자가 회백색으로 변하며 발육이 위축되고 딱딱하게 변해 미이라처럼 되므로 종자소독이 필요하다.',
                     control: `
-                            <p>- 질소 비료를 많이 주지 말기기</p>
-                            <p>- 인산과 칼리비료를 알맞게 주기</p>
-                            <p>- 재배환경을 개선</p>
-                            <p>- 병든 포기는 즉시 제거</p>
+                            <p>- 발병이 확인된 종자는 폐기하고 감염되지 않은 종자를 선별해 사용</p>
+                            <p>- 재배 환경을 건조하고 통풍이 잘되도록 관리하여 곰팡이 발생을 억제</p>
+                            <p>- 감염 부위는 조기에 제거하고 병든 식물의 잔재물은 철저히 소각하여 전염원을 차단</p>
                             `
                                         },
-                '시들음병': {
-                    description: '시들음병은 뿌리와 관부를 통해 전염되는 곰팡이병으로, 고온다습한 환경에서 발병하며, 식물이 시들고 고사하는 특징을 보인다.',
+                '자주무늬병': {
+                    description: '자주무늬병은 곰팡이병으로 콩에 자주색 반점이 생기며, 방제를 위해 무병종자 사용과 철저한 종자 소독이 필요하다.',
                     control: `
-                            <p>- 현재 약물 방제가 불가능</p>
-                            <p>- 병원균이 없는 작물과의 윤작(3년 이상)</p>
-                            <p>- 감염된 식물은 즉시 제거하고 소각</p>
+                            <p>- 베노밀티람수화제, 티오파네이트메틸수화제, 티람액상수화제를 사용해 소독</p>
+                            <p>- 병원균의 번식을 억제하기 위해 통풍이 잘 되는 환경을 조성하고 과도한 습기를 방지</p>
+                            <p>-  병에 걸린 식물은 조기에 제거하고 폐기하여 전염 확산을 막는다.</p>
                             `
                                         },
-                    '탄저병': {
-                    description: '고온다습한 환경에서 과실에 검은 반점과 움푹 패인 병반이 생기며, 심하면 과실이 썩어 말라버리는 곰팡이병이다.',
+                 '들불병': {
+                    description: '들불병은 세균병으로 병반 주위에 황색 띠가 생기며, 반점이 합쳐지면 잎이 너덜너덜해지는 증상을 보인다.',
                     control: `
-                            <p>- 관수액이 파프리카에 묻지 않도록 관리</p>
-                            <p>- 저용약제로 방제</p>
-                            <p>- 병든 잔재물을 제거하고, 재배 도구를 소독하여 병원균 전파를 방지한다.</p>
-                            <p>- 탄저병 저항성 품종을 선택하여 재배를 권장한다.</p>
+                            <p>- 병에 강한 품종을 선택하여 재배</p>
+                            <p>- 발병 지역에서는 옥수수, 수수 등과 2년 이상 윤작</p>
+                            <p>- 감염된 식물체를 조기에 제거하여 전염 확산을 방지</p>
+                            `
+                                        },
+                    '불마름병': {
+                        description: '불마름병은 세균병으로 잎에 녹색 점무늬가 생기며, 커지면서 담갈색으로 변하고 노란 띠와 볼록한 돌기가 형성된다.',
+                    control: `
+                            <p>- 감염되지 않은 종자를 적기에 파종</p>
+                            <p>- 적절한 약제를 선택하여 병 발생 초기부터 살포하여 피해를 줄인다.</p>
+                            <p>- 저항성품종을 심고 적용약제를 선택하여 뿌려주면 불마름병으로 인한 피해를 줄일 수 있다.</p>
+                            `
+                                        },
+                    '콩모자이크바이러스병(SMV)': {
+                    description: 'SMV(Soybean Mosaic Virus)는 모자이크형과 괴저형 병징을 유발하며, 잎맥의 투명화와 모자이크 무늬, 암갈색 반점 등이 나타나고 수확량을 감소시킨다.',
+                    control: `
+                            <p>- 병에 감염되지 않은 깨끗한 종자를 사용하고, 감염된 검은색 또는 갈색 줄무늬가 있는 종자는 제거한다.</p>
+                            <p>- 포장에서 발견되는 제1차 전염원을 즉시 제거한다.</p>
+                            <p>- SMV의 매개충인 기장테두리진딧물, 콩진딧물, 아카시아진딧물, 복숭아혹진딧물 등을 방제하여 바이러스 전염을 차단한다.</p>
+                            <p>- 내병성 품종을 선택하여 재배한다.</p>
                             `
                                     },
             };
@@ -151,15 +166,15 @@
                 </tr>
                     <tr>
                         <td>속(屬)</td>
-                        <td>Capsicum - 고추속</td>
+                        <td>Glycine - 콩속</td>
                     </tr>
                     <tr>
                         <td>과(科)</td>
-                        <td>Solanaceae - 가지과</td>
+                        <td>Fabaceae - 콩과</td>
                     </tr>
                     <tr>
                         <td>목(目)</td>
-                        <td>Solanales - 가지목</td>
+                        <td>Fabales - 콩목</td>
                     </tr>
                     <tr>
                         <td>강(綱)</td>
@@ -168,12 +183,13 @@
                     <tr>
                         <td>문(門)</td>
                         <td>Tracheophyta - 관속식물, 관다발식물</td>
-                    </tr>
+                </tr>
             </table>
         </div>
         <div class="info-section" style="flex: 1;">
             <h3><img src="/static/img/book.png" alt="book Icon">설명</h3>
-            <p>파프리카는 달고 아삭한 식감의 다채로운 색상을 가진 채소로, 비타민 C와 항산화 물질이 풍부해 면역력 강화와 피부 건강에 도움을 줍니다. 주로 샐러드, 볶음요리 등 다양한 요리에 활용되며, 온실 재배를 통해 연중 생산이 가능하다.</p>
+            <p>콩(Glycine max)은 동아시아에서 중요한 작물로 오래전부터 경작되었다. 한국에는 기원전 1000년경에 재배된 것으로 알려져 있다. 속명은 달콤함을 뜻하는
+                그리스어에서 유래했다. 콩은 상당량의 식이 미네랄, 비타민 B 등을 함유하고 있다. 농장 가축에겐 중요한 단백질 공급원이다. 박테리아, 곰팡이, 기생균 등에 취약하다.</p>
         </div>
     </div>
 
@@ -265,16 +281,15 @@
                 <table>
                     <tr>
                         <td>수확 시기</td>
-                        <td>한여름, 늦여름, 초가을, 중추</td>
+                        <td>여름, 가을</td>
                     </tr>
                     <tr>
                         <td>과일 색</td>
                         <td>
-                            <span style="display: inline-block; width: 12px; height: 12px; background-color: red; border-radius: 50%; margin-right: 5px;"></span>
+                            <span style="display: inline-block; width: 12px; height: 12px; background-color: green; border-radius: 50%; margin-right: 5px;"></span>
                             <span style="display: inline-block; width: 12px; height: 12px; background-color: orange; border-radius: 50%; margin-right: 5px;"></span>
-                            <span style="display: inline-block; width: 12px; height: 12px; background-color: yellow; border-radius: 50%; margin-right: 5px;"></span>
-                            <span style="display: inline-block; width: 12px; height: 12px; background-color: green; border-radius: 50%;"></span>
-                        </td>                                          
+                            <span style="display: inline-block; width: 12px; height: 12px; background-color: yellow; border-radius: 50%;"></span>
+                        </td>                        
                         </tr>
                 </table>
             </div>
@@ -287,24 +302,31 @@
         <h3><img src="/static/img/disease.png" alt="Disease Icon">병해충 및 질병</h3>
         <div class="scroll-container">
             <div class="scroll-item" onclick="showDiseaseInfo('미이라병')">
-                <img src="/static/img/bellpepper/bellpepper_disease1.jpg" alt="Disease 1">
-                <p>흰가루병</p>
+                <img src="/static/img/bean/bean_disease1.jpg" alt="Disease 1">
+                <p>미이라병</p>
             </div>
-            <div class="scroll-item" onclick="showDiseaseInfo('시들음음병')">
-                <img src="/static/img/bellpepper/bellpepper_disease2.png" alt="Disease 2">
-                <p>시들음병</p>
+            <div class="scroll-item" onclick="showDiseaseInfo('자주무늬병')">
+                <img src="/static/img/bean/bean_disease2.jpg" alt="Disease 2">
+                <p>자주무늬병</p>
             </div>
-            <div class="scroll-item" onclick="showDiseaseInfo('탄저병')">
-                <img src="/static/img/bellpepper/bellpepper_disease3.png" alt="Disease 3">
-                <p>탄저저병</p>
+            <div class="scroll-item" onclick="showDiseaseInfo('들불병')">
+                <img src="/static/img/bean/bean_disease3.jpg" alt="Disease 3">
+                <p>들불병</p>
+            </div>
+            <div class="scroll-item" onclick="showDiseaseInfo('불마름')">
+                <img src="/static/img/bean/bean_disease4.jpg" alt="Disease 4">
+                <p>불마름</p>
+            </div>
+            <div class="scroll-item" onclick="showDiseaseInfo('콩모자이크바이러스병(SMV)')">
+                <img src="/static/img/bean/bean_disease5.jpg" alt="Disease 5">
+                <p>콩모자이크바이러스병 (SMV)</p>
             </div>
         </div>
         <div class="disease-info"></div>
     </div>
     <div class="info-section" style="flex: 1;">
         <h3><img src="/static/img/happy.png" alt="Interesting Facts Icon">흥미로운 사실</h3>
-        <p>고추 아눔의 열매 var. 원뿔꼴은 절묘하고 가변적입니다. 1493년 콜럼버스가 아메리카 대륙을 발견했을 때 고추 아눔 바. 코 노이드는 약 1세기 후 스페인으로
-            돌아와 중부 유럽에 소개되었으며, 명나라 후기 서부 지역을 통해 중국에 소개되었다.</p>
+        <p>콩은 약 5,000년 전부터 아시아에서 재배되기 시작한 작물로, 단백질 함량이 높아 '밭에서 나는 고기'로 불립니다. 다양한 품종과 색깔을 가지고 있으며, 콩은 된장, 두부, 간장 등 전통 발효식품의 주재료로 사용되며 건강에 유익한 이소플라본과 항산화 성분이 풍부합니다.</p>
     </div>
 </div>
 </body>

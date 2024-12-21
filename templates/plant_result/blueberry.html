@@ -44,21 +44,35 @@
     <script>
         function showDiseaseInfo(diseaseName) {
             const diseaseDescriptions = {
-                '깨씨무늬병': {
-                    description: '깨씨무늬병은 잎에서 갈색을 띤 작은 반점으로 나타난다. 병이 진전되면 방추형 혹은 타원형 병반으로 확대되며 병반은 암갈색으로 변한다. 아래 잎부터 발생하여 점차 위 잎으로 올라가며 퍼진다. 옥수수의 생육 후기에 온도가 높고 비가 많이 올 때 병 발생이 심하며 우리나라 중·남부 평야지에서 많이 발생한다.',
-                    control: '- 깨씨무늬병에 잘 걸리지 않는 품종을 선택하며 건전한 종자를 소독해 심는다.' +
-                        '- 병든 식물체는 옥수수 수확 후 제거해 태워버린다.' +
-                        '병의 발생이 관찰되면 이후 기상예보를 참고해 비가 많이 올 것으로 판단될 때 발병 초기부터 약제에 따라 1~3회 방제한다.'
-                },
-                '검은줄오갈병': {
-                    description: '검은줄오갈병에 걸리면 마디 사이가 자라지 않아 식물체가 위축된다. 잎 표면과 엽맥을 따라서 돌출되고 불규칙한 줄무늬가 생긴다. 병든 식물체는 이삭이 생기지 않거나 생기더라도 매우 작다. 검은줄오갈병은 애멸구에 의해 옮기는 바이러스병으로 영남 남부와 호남지방에서 피해가 심하며 중부 이북에서도 발생한다.',
-                    control: '- 검은줄오갈병에 잘 걸리지 않는 품종을 재배하고, 옥수수의 생육 초기에 애멸구를 방제한다.'
-                },
-                 '그을음무늬병': {
-                    description: '그을음무늬병 발생 초기에는 잎에서 청색의 작은 반점이 생긴다. 병이 진전되면 차츰 주변이 갈색인 방추형으로 병반이 커지면서 확대되어 가운데가 어두운 색으로 변한다. 옥수수의 생육 후기에 온도가 적당하고 비가 많이 오면 병 발생이 심하다. 강원도 산간지에서 많이 발생한다.',
-                    control: '- 그을음무늬병에 강한 품종을 심고, 합리적인 균형 시비를 한다.' +
-                        '- 병든 식물체는 옥수수 수확 후 제거하여 태워버린다.'
-                },
+                '세균성 잎마름병': {
+                    description: ' 세균성 잎마름병은 고온다습한 환경에서 발생하며, 잎에 불규칙한 갈색 병반이 생기고 점차 확대되어 잎이 마르는 증상을 보인다.',
+                    control: `
+                            <p>- 등록된 구리 성분의 살균제를 사용하여 예방적 살포를 시행한다.</p>
+                            <p>- 병 발생 초기와 병 발생 직후에 병원균 확산을 억제할 수 있는 약제를 사용한다.</p>
+                            <p>- 초기 감염 잎과 가지를 즉시 제거하여 병원균의 확산을 차단한다.</p>
+                            `
+                                        },
+                '위축병': {
+                    description: '위축병은 미시간, 뉴저지, 노스캐롤라이나, 매사추세츠, 뉴욕, 캐나다 지역에서 발견된바 있으며 블루베리 매미충, 박테리아 병원균에 의해 발병하며 심각하게 퍼지고 있습니다. Stunt phytoplasma 미생물은 나무껍질 안쪽에서 서식하는데, 매미충(Scaphytopius spp)에 의해 전이 되거나 감염된 나무의 삽목묘에 의해서도 전이 된다.',
+                    control: `
+                            <p>- 병든 과실과 과수원 주변의 아카시 나무(속칭 아카시아 나무)는 탄저병균이 월동하기 좋은 장소이므로 제거한다.</p>
+                            <p>- 6월 상순부터 시기별로 전용 약제를 번갈아 살포하여 갈색무늬병 및 겹무늬썩음병을 동시에 방제한다.</p>
+                            `
+                                        },
+                 '붉은반점병': {
+                    description: ' 붉은 원형 바이러스 병은 블루베리 붉은 반점 바이러스에 의해 발생하며 주로 미국 동부지역에서 발생하였으며, 미시간 지역에서도 나타나고 있다. 주요 증상으로는 줄기와 잎사귀들에서 붉은 반점들이 나타나며 주로 늦 여름 ~ 가을 초에 발견할 수 있다.',
+                    control: `
+                            <p>- 감염된 나무들은 즉시 잘라주고 증식되기전에 의심이 되는 나무도 바로 제거</p>
+                            <p>- 6-9월 사이에만 발생하기에 이 시기를 주의</p>
+                            `
+                                        },
+                    '잿빛곰팡이병': {
+                    description: '잿빛 곰팡이 병은 개화기나 꽃잎이 떨어진 직후 습기가 오랫동안 지속되면 몇몇 지역에서 문제가 될 수 있다. 잿빛 곰팡이에 감염되면 꽃의 병해를 입은 조직부터 짧은 검은색 털이 나온다. 이 병의 근원으로 알려진 잡초들의 종류로는 블랙베리,산딸기,산떡쑥,장미과 식물,애기수영등이 있다. 습한 날씨가 지속되는 동안, 곰팡이는 겨울동안 식물의 죽은 조직에서 포자를 생성하고 이러한 포자들이 바람에 의해 개화하고 있는 블루베리 꽃으로 옮겨진다.',
+                    control: `
+                            <p>- 습도가 높은 하우스에서 발생 확률이 높은 만큼 습도와 온도를 잘 조절한다.</p>
+                            <p>- 보통 5월 중순 ~ 5월 말에 관찰되며, 만약 병해가 개화 중기에 발병되고 습한 기간이 예상된다면 살균제를 살포한다.</p>
+                            `
+                                        },
             };
 
             const container = document.querySelector('.scroll-container');
@@ -68,14 +82,15 @@
             infoBox.style.display = 'block';
 
              const data = diseaseDescriptions[diseaseName];
-            infoBox.innerHTML = `
-                <h4><span>|</span> ${diseaseName}</h4>
-                <p>${data.description}</p>
-                <hr>
-                <div class="control-section">▶ 방제법</div>
-                <p>${data.control}</p>
-                <button class="back-button" onclick="showDiseaseList()">돌아가기</button>
-            `;
+             infoBox.innerHTML = `
+    <h4><span>|</span> ${diseaseName}</h4>
+    <p>${data.description}</p>
+    <hr>
+    <div class="control-section">▶ 방제법</div>
+    ${data.control}
+    <button class="back-button" onclick="showDiseaseList()">돌아가기</button>
+`;
+
         }
 
         function showDiseaseList() {
@@ -102,9 +117,10 @@
 <body>
     <header>
         <a href="/">Home</a>
-        <a href="/upload">LeafAI</a>
-        <a href="#">CCTV</a>
-        <a href="#">Plant Information</a>
+        <a href="/capture">LeafAI</a>
+        <a href="/cctv">CCTV</a>
+        <a href="/search">Plant Information</a>
+        <a href="/view_growth_logs">Blog</a>
     </header>
     <div class="container">
         <!-- 오른쪽 위에 이미지를 배치 -->
@@ -115,14 +131,13 @@
         <!-- 왼쪽에 설명을 표시 -->
 <div class="description-box">
     <div style="display: flex; align-items: center; margin-bottom: 10px;">
-        <img src="/static/img/corn/corn_icon.png" alt="corn_icon" style="width:20px; height:20px; margin-right:10px;">
         <h2 style="margin: 0;">LeafAI 결과</h2>
     </div>
     <p style="margin: 0;">
         <strong>Plant and Disease:</strong> {{ result }}
     </p>
     <p style="margin: 0;">
-        <strong>Confidence:</strong> {{ confidence | default(0) * 100 | round(2) }}%
+        <strong>Confidence:</strong> {{ confidence | default(0) | round(2) }}%
     </p>
 </div>
 </div>
@@ -131,7 +146,7 @@
     <!-- 추가 섹션 -->
     <div class="info-container">
         <div class="info-section" style="flex: 1;">
-            <h3><img src="/static/img/Key facts.png" alt="Key Facts Icon">학명 분류</h3>
+            <h3><img src="/static/img/menu.png" alt="Key Facts Icon">학명 분류</h3>
             <table>
                 <tr>
                     <th>분류</th>
@@ -160,10 +175,10 @@
             </table>
         </div>
         <div class="info-section" style="flex: 1;">
-            <h3><img src="/static/img/Key facts.png" alt="Key Facts Icon">설명</h3>
+            <h3><img src="/static/img/book.png" alt="book Icon">설명</h3>
             <p>불루베리(Vaccinium corymbosum)는 달콤한 식용 열매 때문에 귀중히 여겨지며, 열매에는 비타민 C와 철(Fe)이 풍부합니다. 한국에서는
-            2010년 무럽부터 전북 정읍, 겅기도 평택을 중심으로 재배, 생산이 본격화되며, 향산화 물질이 풍부하여 슈퍼푸드라는 명칭과 함께 블루베리를
-            재배하는 농가가 늘어나 이제는 쉽게 찾아볼 수 있습니다.</p>
+                2010년 무럽부터 전북 정읍, 겅기도 평택을 중심으로 재배, 생산이 본격화되며, 향산화 물질이 풍부하여 슈퍼푸드라는 명칭과 함께 블루베리를
+                재배하는 농가가 늘어나 이제는 쉽게 찾아볼 수 있습니다.</p>
         </div>
     </div>
 
@@ -186,7 +201,7 @@
                 </tr>
                 <tr>
                     <td>종류</td>
-                    <td>관목</td>
+                    <td>나무</td>
                 </tr>
                 <tr>
                     <td>수명</td>
@@ -222,7 +237,7 @@
                     </tr>
                     <tr>
                         <td>잎 색깔</td>
-                        <td>녹색</td>
+                        <td><span style="display: inline-block; width: 12px; height: 12px; background-color: green; border-radius: 50%;">
                     </tr>
                 </table>
             </div>
@@ -242,7 +257,11 @@
                     </tr>
                     <tr>
                         <td>꽃 색깔</td>
-                        <td>흰색, 분홍색</td>
+                        <td>
+                            <span style="display: inline-block; width: 12px; height: 12px; background-color: white; border-radius: 50%; border: 1px solid #ccc; margin-right: 5px;"></span>
+                            <span style="display: inline-block; width: 12px; height: 12px; background-color: pink; border-radius: 50%;"></span>
+                        </td>
+                           
                     </tr>
                 </table>
             </div>
@@ -258,7 +277,10 @@
                     </tr>
                     <tr>
                         <td>과일 색</td>
-                        <td>파란색, 보라색</td>
+                        <td>
+                            <span style="display: inline-block; width: 12px; height: 12px; background-color: blue; border-radius: 50%; margin-right: 5px;"></span>
+                            <span style="display: inline-block; width: 12px; height: 12px; background-color: purple; border-radius: 50%;"></span>
+                        </td>                         
                     </tr>
                 </table>
             </div>
@@ -270,27 +292,30 @@
     <div class="info-section" style="flex: 1;">
         <h3><img src="/static/img/disease.png" alt="Disease Icon">병해충 및 질병</h3>
         <div class="scroll-container">
-            <div class="scroll-item" onclick="showDiseaseInfo('깨씨무늬병')">
-                <img src="/static/img/corn/corn_disease1.jpg" alt="Disease 1">
-                <p>갈색 반점</p>
+            <div class="scroll-item" onclick="showDiseaseInfo('세균성잎마름병')">
+                <img src="/static/img/blueberry/blueberry_disease1.png" alt="Disease 1">
+                <p>세균성잎마름병</p>
             </div>
-            <div class="scroll-item">
-                <img src="/static/img/disease2.png" alt="Disease 2">
-                <p>영양소 결핍</p>
+            <div class="scroll-item" onclick="showDiseaseInfo('위축병')">
+                <img src="/static/img/blueberry/blueberry_disease2.jpg" alt="Disease 2">
+                <p>위축병</p>
             </div>
-            <div class="scroll-item">
-                <img src="/static/img/disease3.png" alt="Disease 3">
-                <p>애벌레</p>
+            <div class="scroll-item" onclick="showDiseaseInfo('검은별무늬병')">
+                <img src="/static/img/blueberry/blueberry_disease3.jpg" alt="Disease 3">
+                <p>검은별무늬병</p>
             </div>
-
+            <div class="scroll-item" onclick="showDiseaseInfo('붉은별무늬병')">
+                <img src="/static/img/blueberry/blueberry_disease4.jpg" alt="Disease 4">
+                <p>붉은별무늬병</p>
+            </div>
         </div>
         <div class="disease-info"></div>
     </div>
     <div class="info-section" style="flex: 1;">
-        <h3><img src="/static/img/facts.png" alt="Interesting Facts Icon">흥미로운 사실</h3>
+        <h3><img src="/static/img/happy.png" alt="Interesting Facts Icon">흥미로운 사실</h3>
         <p>블루베리 또는 Vaccinium corymbosum은 일반적으로 식료품점에서 발견되는 블루베리의 품종입니다. 이들은 크랜베리나 허클베리와 관련이 있습니다.
-        원주민 미국인들은 수천년동안 블루베리의 야생종을 재배해 왔습니다. 그러나 프레더릭 버논 코빌이 1908년에 이 특정 종을 재배했습니다. 블루베리는 다양한
-        야생 동물에게도 식량을 제공합니다.</p>
+            원주민 미국인들은 수천년동안 블루베리의 야생종을 재배해 왔습니다. 그러나 프레더릭 버논 코빌이 1908년에 이 특정 종을 재배했습니다. 블루베리는 다양한
+            야생 동물에게도 식량을 제공한다.</p>
     </div>
 </div>
 

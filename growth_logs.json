@@ -19,5 +19,39 @@
         "water": "ㅁ",
         "humidity": "ㅁ",
         "notes": "ㅁ"
+    },
+    {
+        "crop_name": "작물1",
+        "watering": "많음",
+        "weather": "unknown",
+        "notes": "ㅁㄴㅇㄹ",
+        "temperature": 36.04,
+        "ppfd": 606.55
+    },
+    {
+        "crop_name": "작물2",
+        "watering": "많음",
+        "weather": "unknown",
+        "notes": "4",
+        "temperature": 36.09,
+        "ppfd": 607.04
+    },
+    {
+        "crop_name": "ㄷㄱㄷㄱㄷ",
+        "watering": "ㄷㄱㄷㄱ",
+        "weather": "unknown",
+        "notes": "ㄷㄱㄷㄱㄷ",
+        "temperature": 36.07,
+        "ppfd": 606.55
+    },
+    {
+        "crop_name": "장미",
+        "watering": "123",
+        "weather": "unknown",
+        "notes": "123",
+        "temperature": 36.09,
+        "ppfd": 607.04,
+        "date": "2024-12-21",
+        "humidity": "123"
     }
 ]

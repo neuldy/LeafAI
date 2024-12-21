@@ -39,12 +39,7 @@
         {% if result == "No Data" %}
             <h2 style="color: red;">작물에 대한 데이터가 적습니다.</h2>
             <img src="{{ url_for('static', filename=filepath) }}" alt="Captured Image" style="max-width: 400px; border-radius: 10px;">
-        {% else %}
-            <h2>Captured Image:</h2>
-            <img src="{{ url_for('static', filename=filepath) }}" alt="Captured Image" style="max-width: 400px; border-radius: 10px;">
-            <h3>Result: {{ result }}</h3>
-            <p>Confidence: {{ confidence }}%</p>
-        {% endif %}
+
 
         <br>
         <a href="{{ url_for('home') }}" class="back-btn">홈으로 돌아가기</a>

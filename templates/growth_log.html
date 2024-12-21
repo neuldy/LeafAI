@@ -106,7 +106,7 @@
 <body>
     <header>
         <a href="/">Home</a>
-        <a href="/growth_log">Growth Log</a>
+        <a href="/capture">LeafAI</a>
         <a href="/cctv">CCTV</a>
         <a href="/search">Plant Information</a>
         <a href="/view_growth_logs">Blog</a> <!-- Blog link added here -->
@@ -115,6 +115,20 @@
         <h1>생장일지</h1>
         <form action="{{ url_for('growth_log') }}" method="POST">
             <div class="grid-container">
+
+                <div class="grid-item">
+                    <label for="crop_name">작물 이름:</label>
+                    <input type="text" id="crop_name" name="crop_name" required>
+                </div>
+                <div class="grid-item">
+                    <label for="date">날짜:</label>
+                    <input type="date" id="date" name="date" required>
+
+                    <script>
+                    // 페이지 로드 후, 현재 날짜를 자동으로 입력
+                    document.getElementById('date').value = new Date().toISOString().split('T')[0];
+                    </script>
+                </div>
                 <div class="grid-item">
                     <label for="temperature">온도 (°C)</label>
                     <input type="text" id="temperature" name="temperature" value="{{ temperature if temperature else '' }}" readonly>
@@ -124,13 +138,18 @@
                     <input type="text" id="ppfd" name="ppfd" value="{{ ppfd if ppfd else '' }}" readonly>
                 </div>
                 <div class="grid-item">
-                    <label for="water">물의 양</label>
+                    <label for="water">물의 양:</label>
                     <input type="text" id="water" name="water" required>
-                </div>
+                </div>                
                 <div class="grid-item">
                     <label for="humidity">습도 (%)</label>
                     <input type="text" id="humidity" name="humidity" required>
                 </div>
+                <div class="grid-item">
+                    <label for="weather">날씨</label>
+                    <input type="text" id="weather" name="weather" required>
+                </div>
+                
             </div>
             <label for="notes">상세 정보:</label>
             <textarea id="notes" name="notes" rows="5" placeholder="메모를 입력하세요..."></textarea>

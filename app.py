@@ -10,6 +10,7 @@ import threading
 from picamera2 import Picamera2
 from werkzeug.utils import secure_filename  # Import secure_filename
 
+
 # Flask 설정
 app = Flask(__name__)
 UPLOAD_FOLDER = 'static/uploads/'
@@ -378,7 +379,7 @@ def sensor_control():
 
 GROWTH_LOG_FILE = 'growth_logs.json'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'bmp'}
-import datetime
+from datetime import datetime
 
 @app.route('/growth_log', methods=['GET', 'POST'])
 def growth_log():
@@ -407,8 +408,10 @@ def growth_log():
         crop_name = request.form['crop_name']
         # Remove the date handling here as we no longer need it
         # We don't use date from the form anymore, as requested
-        watering = request.form['watering']
-        weather = request.form['weather']
+        
+        watering = request.form.get('water', 'unknown')  # 기본값 설정
+        humidity = request.form.get('humidity', 'unknown')  # 기본값 설정
+        weather = request.form.get('weather', 'unknown')  # 기본값 설정
         notes = request.form['notes']
 
         # Save the log entry with temperature and PPFD
@@ -418,7 +421,9 @@ def growth_log():
             'weather': weather,
             'notes': notes,
             'temperature': temperature,
-            'ppfd': ppfd
+            'ppfd': ppfd,
+            'date': datetime.now().strftime("%Y-%m-%d"),
+            'humidity': humidity
         }
 
         # Read or initialize growth logs

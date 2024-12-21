@@ -44,21 +44,32 @@
     <script>
         function showDiseaseInfo(diseaseName) {
             const diseaseDescriptions = {
-                '깨씨무늬병': {
-                    description: '깨씨무늬병은 잎에서 갈색을 띤 작은 반점으로 나타난다. 병이 진전되면 방추형 혹은 타원형 병반으로 확대되며 병반은 암갈색으로 변한다. 아래 잎부터 발생하여 점차 위 잎으로 올라가며 퍼진다. 옥수수의 생육 후기에 온도가 높고 비가 많이 올 때 병 발생이 심하며 우리나라 중·남부 평야지에서 많이 발생한다.',
-                    control: '- 깨씨무늬병에 잘 걸리지 않는 품종을 선택하며 건전한 종자를 소독해 심는다.' +
-                        '- 병든 식물체는 옥수수 수확 후 제거해 태워버린다.' +
-                        '병의 발생이 관찰되면 이후 기상예보를 참고해 비가 많이 올 것으로 판단될 때 발병 초기부터 약제에 따라 1~3회 방제한다.'
-                },
-                '검은줄오갈병': {
-                    description: '검은줄오갈병에 걸리면 마디 사이가 자라지 않아 식물체가 위축된다. 잎 표면과 엽맥을 따라서 돌출되고 불규칙한 줄무늬가 생긴다. 병든 식물체는 이삭이 생기지 않거나 생기더라도 매우 작다. 검은줄오갈병은 애멸구에 의해 옮기는 바이러스병으로 영남 남부와 호남지방에서 피해가 심하며 중부 이북에서도 발생한다.',
-                    control: '- 검은줄오갈병에 잘 걸리지 않는 품종을 재배하고, 옥수수의 생육 초기에 애멸구를 방제한다.'
-                },
-                 '그을음무늬병': {
-                    description: '그을음무늬병 발생 초기에는 잎에서 청색의 작은 반점이 생긴다. 병이 진전되면 차츰 주변이 갈색인 방추형으로 병반이 커지면서 확대되어 가운데가 어두운 색으로 변한다. 옥수수의 생육 후기에 온도가 적당하고 비가 많이 오면 병 발생이 심하다. 강원도 산간지에서 많이 발생한다.',
-                    control: '- 그을음무늬병에 강한 품종을 심고, 합리적인 균형 시비를 한다.' +
-                        '- 병든 식물체는 옥수수 수확 후 제거하여 태워버린다.'
-                },
+                '흰가루병': {
+                    description: '흰가루병은 곰팡이에 의해 잎과 줄기에 흰 가루 같은 병반이 생기며, 고온다습한 환경에서 발병이 심화된다.',
+                    control: `
+                            <p>- 질소 비료를 많이 주지 말기기</p>
+                            <p>- 인산과 칼리비료를 알맞게 주기</p>
+                            <p>- 재배환경을 개선</p>
+                            <p>- 병든 포기는 즉시 제거</p>
+                            `
+                                        },
+                '시들음병': {
+                    description: '시들음병은 뿌리와 관부를 통해 전염되는 곰팡이병으로, 고온다습한 환경에서 발병하며, 식물이 시들고 고사하는 특징을 보인다.',
+                    control: `
+                            <p>- 현재 약물 방제가 불가능</p>
+                            <p>- 병원균이 없는 작물과의 윤작(3년 이상)</p>
+                            <p>- 감염된 식물은 즉시 제거하고 소각</p>
+                            `
+                                        },
+                    '탄저병': {
+                    description: '고온다습한 환경에서 과실에 검은 반점과 움푹 패인 병반이 생기며, 심하면 과실이 썩어 말라버리는 곰팡이병이다.',
+                    control: `
+                            <p>- 관수액이 파프리카에 묻지 않도록 관리</p>
+                            <p>- 저용약제로 방제</p>
+                            <p>- 병든 잔재물을 제거하고, 재배 도구를 소독하여 병원균 전파를 방지한다.</p>
+                            <p>- 탄저병 저항성 품종을 선택하여 재배를 권장한다.</p>
+                            `
+                                    },
             };
 
             const container = document.querySelector('.scroll-container');
@@ -68,14 +79,15 @@
             infoBox.style.display = 'block';
 
              const data = diseaseDescriptions[diseaseName];
-            infoBox.innerHTML = `
-                <h4><span>|</span> ${diseaseName}</h4>
-                <p>${data.description}</p>
-                <hr>
-                <div class="control-section">▶ 방제법</div>
-                <p>${data.control}</p>
-                <button class="back-button" onclick="showDiseaseList()">돌아가기</button>
-            `;
+             infoBox.innerHTML = `
+    <h4><span>|</span> ${diseaseName}</h4>
+    <p>${data.description}</p>
+    <hr>
+    <div class="control-section">▶ 방제법</div>
+    ${data.control}
+    <button class="back-button" onclick="showDiseaseList()">돌아가기</button>
+`;
+
         }
 
         function showDiseaseList() {
@@ -102,9 +114,10 @@
 <body>
     <header>
         <a href="/">Home</a>
-        <a href="/upload">LeafAI</a>
-        <a href="#">CCTV</a>
-        <a href="#">Plant Information</a>
+        <a href="/capture">LeafAI</a>
+        <a href="/cctv">CCTV</a>
+        <a href="/search">Plant Information</a>
+        <a href="/view_growth_logs">Blog</a>
     </header>
     <div class="container">
         <!-- 오른쪽 위에 이미지를 배치 -->
@@ -115,14 +128,13 @@
         <!-- 왼쪽에 설명을 표시 -->
 <div class="description-box">
     <div style="display: flex; align-items: center; margin-bottom: 10px;">
-        <img src="/static/img/corn/corn_icon.png" alt="corn_icon" style="width:20px; height:20px; margin-right:10px;">
         <h2 style="margin: 0;">LeafAI 결과</h2>
     </div>
     <p style="margin: 0;">
         <strong>Plant and Disease:</strong> {{ result }}
     </p>
     <p style="margin: 0;">
-        <strong>Confidence:</strong> {{ confidence | default(0) * 100 | round(2) }}%
+        <strong>Confidence:</strong> {{ confidence | default(0)| round(2) }}%
     </p>
 </div>
 </div>
@@ -131,7 +143,7 @@
     <!-- 추가 섹션 -->
     <div class="info-container">
         <div class="info-section" style="flex: 1;">
-            <h3><img src="/static/img/Key facts.png" alt="Key Facts Icon">학명 분류</h3>
+            <h3><img src="/static/img/menu.png" alt="Key Facts Icon">학명 분류</h3>
             <table>
                 <tr>
                     <th>분류</th>
@@ -156,11 +168,11 @@
                 <tr>
                     <td>문(門)</td>
                     <td>Tracheophyta - 관속식물, 관다발식물</td>
-                </tr>
+                    </tr>
             </table>
         </div>
         <div class="info-section" style="flex: 1;">
-            <h3><img src="/static/img/Key facts.png" alt="Key Facts Icon">설명</h3>
+            <h3><img src="/static/img/book.png" alt="book Icon">설명</h3>
             <p>옥수수(Zea mays)는 1만 년 전 멕시코 남부 원주민에 의해 처음으로 토착된 곡물이다. 1493년 콜럼버스가 스페인에 처음 소개한 후 전 세계로 퍼져 나갔다. 다양한 기후에 잘 적응하며 자라기 때문이다. 동물 사료, 옥수수 에탄올 및 바이오 연료 제조 등으로 활용된다. 조명충나방, 외외벌레사촌 애벌레 등에 취약하다.</p>
         </div>
     </div>
@@ -220,8 +232,9 @@
                     </tr>
                     <tr>
                         <td>잎 색깔</td>
-                        <td>녹색</td>
-                    </tr>
+                        <td>
+                            <span style="display: inline-block; width: 12px; height: 12px; background-color: green; border-radius: 50%;"></span>
+                        </td>                                        
                 </table>
             </div>
             <div class="tab-content">
@@ -231,25 +244,31 @@
                         <th>Details</th>
                     </tr>
                     <tr>
-                        <td>개화 시기</td>
-                        <td>닿은 봄, 초여름, 한여름</td>
-                    </tr>
-                    <tr>
-                        <td>꽃 색깔</td>
-                        <td>흑색</td>
+                        <tr>
+                            <td>개화 시기</td>
+                            <td>닿은 봄, 초여름, 한여름</td>
+                        </tr>
+                        <tr>
+                            <td>꽃 색깔</td>
+                            <td>
+                                <span style="display: inline-block; width: 12px; height: 12px; background-color: lightgreen; border-radius: 50%; margin-right: 5px;"></span>
+                                <span style="display: inline-block; width: 12px; height: 12px; background-color: yellowgreen; border-radius: 50%;"></span>
+                            </td>
+                            
                     </tr>
                 </table>
             </div>
             <div class="tab-content">
                 <table>
                     <tr>
-                        <th>Attribute</th>
-                        <th>Details</th>
-                    </tr>
-                    <tr>
-                        <td>과일 색</td>
-                        <td>보라색</td>
-                    </tr>
+                        <tr>
+                            <td>과일 색</td>
+                            <td>
+                                <span style="display: inline-block; width: 12px; height: 12px; background-color: purple; border-radius: 50%; margin-right: 5px;"></span>
+                                <span style="display: inline-block; width: 12px; height: 12px; background-color: yellow; border-radius: 50%;"></span>
+                            </td>
+                                                                                            
+                        </tr>
                 </table>
             </div>
         </div>
@@ -264,38 +283,21 @@
                 <img src="/static/img/corn/corn_disease1.jpg" alt="Disease 1">
                 <p>깨씨무늬병</p>
             </div>
-            <div class="scroll-item">
-                <img src="/static/img/disease2.png" alt="Disease 2">
-                <p>상처</p>
+            <div class="scroll-item" onclick="showDiseaseInfo('검은줄오갈병')">
+                <img src="/static/img/corn/corn_disease2.jpg" alt="Disease 2">
+                <p>검은줄오갈병</p>
             </div>
-            <div class="scroll-item">
-                <img src="/static/img/disease3.png" alt="Disease 3">
-                <p>꽃 시들음</p>
-            </div>
-            <div class="scroll-item">
-                <img src="/static/img/disease4.png" alt="Disease 4">
-                <p>흰가루병</p>
-            </div>
-            <div class="scroll-item">
-                <img src="/static/img/disease5.png" alt="Disease 5">
-                <p>녹병</p>
-            </div>
-            <div class="scroll-item">
-                <img src="/static/img/disease6.png" alt="Disease 6">
-                <p>점무늬병</p>
-            </div>
-            <div class="scroll-item">
-                <img src="/static/img/disease7.png" alt="Disease 7">
-                <p>잎마름병</p>
+            <div class="scroll-item" onclick="showDiseaseInfo('그을음무늬병')">
+                <img src="/static/img/corn/corn_disease3.jpg" alt="Disease 3">
+                <p>그을음무늬병</p>
             </div>
         </div>
         <div class="disease-info"></div>
     </div>
     <div class="info-section" style="flex: 1;">
-        <h3><img src="/static/img/facts.png" alt="Interesting Facts Icon">흥미로운 사실</h3>
+        <h3><img src="/static/img/happy.png" alt="Interesting Facts Icon">흥미로운 사실</h3>
         <p>옥수수는 세계에서 가장 널리 재배되는 작물 중 하나로, 다양한 기후와 환경에서 자랄 수 있는 강한 적응력을 가지고 있습니다. 옥수수의 품종은 수백 가지에 달하며, 이는 다양한 용도와 환경 요구를 충족시키기 위해 개발되었습니다.</p>
     </div>
 </div>
-
 </body>
 </html>

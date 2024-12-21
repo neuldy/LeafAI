@@ -97,9 +97,9 @@
 <body>
     <header>
         <a href="/">Home</a>
-        <a href="/upload">LeafAI</a>
+        <a href="/capture">LeafAI</a>
         <a href="/cctv">CCTV</a>
-        <a href="#">Plant Information</a>
+        <a href="/search">Plant Information</a>
         <a href="/view_growth_logs">Blog</a>
     </header>
     <div class="container">
@@ -108,15 +108,16 @@
         <!-- 생장일지 카드 목록 -->
         {% if growth_logs %}
             {% for log in growth_logs %}
-            <div class="log-card">
-                <h3>{{ log.crop_name }} - {{ log.date }}</h3>
-                <p><strong>온도:</strong> {{ log.temperature }} °C</p>
-                <p><strong>빛의 양 (PPFD):</strong> {{ log.ppfd }} μmol/m²/s</p>
-                <p><strong>물의 양:</strong> {{ log.water }}</p>
-                <p><strong>습도:</strong> {{ log.humidity }}%</p>
-                <p class="notes"><strong>메모:</strong> {{ log.notes }}</p>
-                <p class="metadata">작성일: {{ log.date }}</p>
-            </div>
+<div class="log-card">
+    <h3>{{ log.crop_name }} - {{ log.date }}</h3>
+    <p><strong>온도:</strong> {{ log.temperature }} °C</p>
+    <p><strong>빛의 양 (PPFD):</strong> {{ log.ppfd }} μmol/m²/s</p>
+    <p><strong>물의 양:</strong> {{ log.watering }}</p>
+    <p><strong>습도:</strong> {{ log.humidity }}%</p>
+    <p class="notes"><strong>메모:</strong> {{ log.notes }}</p>
+    <p class="metadata">작성일: {{ log.date }}</p>
+</div>
+
             {% endfor %}
         {% else %}
             <p style="text-align: center; color: #999;">등록된 생장일지가 없습니다.</p>
