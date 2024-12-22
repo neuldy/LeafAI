@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>콩(대두)</title>
+    <title>Result</title>
    <style>
         body { font-family: 'Roboto', Arial, sans-serif; margin: 0; padding: 0; height: 100vh; display: flex; flex-direction: column; align-items: center; background-color: #ffffff; }
         header { background-color: #ffffff; padding: 15px 0; position: fixed; width: 100%; top: 0; z-index: 1000; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); text-align: center; }
@@ -40,22 +40,46 @@
         .disease-info .control-section { font-weight: bold; margin-bottom: 10px; }
         .back-button { margin-top: 10px; padding: 10px 20px; background-color: #333; color: #fff; border: none; border-radius: 5px; cursor: pointer; }
         .back-button:hover { background-color: #555; }
-        .color-circle { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 10px; float: left;  }     
-</style>
-
     </style>
     <script>
         function showDiseaseInfo(diseaseName) {
             const diseaseDescriptions = {
-                '깨씨무늬병': {
-                    description: '깨씨무늬병은 잎에서 갈색을 띤 작은 반점으로 나타난다. 병이 진전되면 방추형 혹은 타원형 병반으로 확대되며 병반은 암갈색으로 변한다. 아래 잎부터 발생하여 점차 위 잎으로 올라가며 퍼진다. 옥수수의 생육 후기에 온도가 높고 비가 많이 올 때 병 발생이 심하며 우리나라 중·남부 평야지에서 많이 발생한다.',
-                    control: '적절한 환기를 유지하고 병든 잎을 제거하십시오.'
-                },
-                '상처': {
-                    description: '상처는 물리적 손상으로 인해 발생하며 병균이 침투할 수 있습니다.',
-                    control: '상처 부위를 소독하고 필요 시 보호제를 사용하십시오.'
-                },
-                // 다른 병해 데이터 추가 가능
+                 '세균구멍병': {
+                    description: '세균구멍병은 잎, 열매, 가지에 담녹색 수침상의 병반이 생긴 뒤 갈색병반으로 변하며 떨어져 나가 구멍이 생기고, 4월 하순부터 10월까지 특히 5~7월에 많이 발생한다.',
+                    control: `
+                           <p>- 나무를 튼튼하게 키우고 질소 과용 금지</p>
+                            <p>- 복숭아 개화기에 가지마름 피해 결과지를 제거함으로써 유과기 세균구멍병과 수확기 잿빛무늬병 발병을 경감시킬 수 있음</p>
+                            <p>- SS기 살포압력은 저압(1,700rpm) 권장, 고압살포는 과실에 상처를 유발하여 세균구멍병 감염요인이 될 수 있음</p>
+                            <p>- 낙화직후부터 적과하기 전까지 노린재류 방제를 통해 유과기 세균구멍병을 75%정도 경감시킬 수 있음</p>
+                            <p>- 개화 전 보드로액 살포, 낙화 직후 적용약제 살포를 통해 적극적인 방제필요 </p>
+                            `
+                                        },
+                '탄저병': {
+                    description: '탄저병은 주로 열매에 큰 피해를 입히며, 녹갈색 수침상의 병반이 갈색으로 변하고 움푹 들어가며, 병든 과일은 가지에 붙어 말라 위축되며, 46월 강수량 300~400㎜와 25℃ 전후의 기온에서 발병이 많다.',
+                    control: `
+                            <p>- 전정시 미이라 과실이 달려 있는 가지는 기부까지 제거한다.</p>
+                            <p>- 개화기에 꽃이 피지 않고 말라 죽은 가지는 제거하고, 병든 과일은 제거 후 땅 속 깊이 묻는다.</p>
+                            <p>- 말려 있는 잎을 가진 가지는 봄과 여름에 제거한다.</p>
+                            <p>- 개화직전 석회보르도액을 살포하고 낙화 후 4월 상순~5월상순부터 적정 약제 살포한다.</p>
+                            <p>- 가능한 한 무병지에서 재배하고 과습하거나 배수가 불량한 지역에서의 재배는 피한다.</p>
+                            `
+                                        },
+                 '잿빛무늬병': {
+                    description: '잿빛무늬병은 꽃, 가지, 과실에 영향을 미쳐 미이라처럼 변색되고 말라가며, 분생포자와 자낭포자가 비바람과 곤충을 통해 열매의 상처나 잎의 기공을 통해 감염되며, 25℃ 전후와 높은 습도에서 발병이 활발하다.',
+                    control: `
+                            <p>- 개화기(4월 중순~하순)에 1회, 수확 20~30일전부터 수확기까지 3회 이내 약제를 실시한다.</p>
+                            <p>- 병에 걸린 꽃과 과실을 제거하여 병원균 밀도를 낮춘다.</p>
+                            <p>- 잿빛무늬병이 많이 발생하는 가지는 수시로 전정하여 제거한다.</p>
+                            <p>- 예방위주의 살포를 하고 강우 상태에 따라 살포간격을 늘리거나 줄여서 살포한다.</p>
+                            `
+                                        },
+                    '점무늬낙엽병': {
+                    description: '점무늬낙엽병은 낙엽과 병반에서 월동하며 고온다습한 장마철에 급증해 잎, 과실, 신초에 갈색 반점이 생기고 낙엽을 유발하는 병이다.',
+                    control: `
+                            <p>- 병든 잎 및 과실을 제거한다.</p>
+                            <p>- 초기 방제: 낙화 직후~6월까지 전용 약제를 살포하여 붉은별무늬병,검은별무늬병 및 과심곰팡이병을 동시에 방제한다.</p>
+                            `
+                                        },
             };
 
             const container = document.querySelector('.scroll-container');
@@ -65,14 +89,15 @@
             infoBox.style.display = 'block';
 
              const data = diseaseDescriptions[diseaseName];
-            infoBox.innerHTML = `
-                <h4><span>|</span> ${diseaseName}</h4>
-                <p>${data.description}</p>
-                <hr>
-                <div class="control-section">▶ 방제법</div>
-                <p>${data.control}</p>
-                <button class="back-button" onclick="showDiseaseList()">돌아가기</button>
-            `;
+             infoBox.innerHTML = `
+    <h4><span>|</span> ${diseaseName}</h4>
+    <p>${data.description}</p>
+    <hr>
+    <div class="control-section">▶ 방제법</div>
+    ${data.control}
+    <button class="back-button" onclick="showDiseaseList()">돌아가기</button>
+`;
+
         }
 
         function showDiseaseList() {
@@ -101,26 +126,34 @@
         <a href="/">Home</a>
         <a href="/capture">LeafAI</a>
         <a href="/cctv">CCTV</a>
-        <!-- 'Plant Information' 클릭 시 /result로 리디렉션되도록 수정 -->
-        <a href="/result">Plant Information</a>
+        <a href="/search">Plant Information</a>
+        <a href="/view_growth_logs">Blog</a>
     </header>
-    
     <div class="container">
         <!-- 오른쪽 위에 이미지를 배치 -->
         <div class="image-box">
-            <img src="{{ image_path }}" alt="Analyzed Plant Image">
+            <img src="{{ filepath }}" alt="Uploaded Plant Image">
         </div>
+
         <!-- 왼쪽에 설명을 표시 -->
-        <div class="description-box">
-            <h2>Prediction Result</h2>
-            <p><strong>Plant and Disease:</strong> {{ result }}</p>
-        </div>
-    </div>    
+<div class="description-box">
+    <div style="display: flex; align-items: center; margin-bottom: 10px;">
+        <h2 style="margin: 0;">LeafAI 결과</h2>
+    </div>
+    <p style="margin: 0;">
+        <strong>Plant and Disease:</strong> {{ result }}
+    </p>
+    <p style="margin: 0;">
+        <strong>Confidence:</strong> {{ confidence | default(0)| round(2) }}%
+    </p>
+</div>
+</div>
+    </div>
 
     <!-- 추가 섹션 -->
     <div class="info-container">
         <div class="info-section" style="flex: 1;">
-            <h3><img src="/static/img/Key facts.png" alt="Key Facts Icon">학명 분류</h3>
+            <h3><img src="/static/img/menu.png" alt="Key Facts Icon">학명 분류</h3>
             <table>
                 <tr>
                     <th>분류</th>
@@ -128,32 +161,31 @@
                 </tr>
                 <tr>
                     <td>속(屬)</td>
-                    <td><i><b>Glycine</b></i> - 콩속</td>
+                    <td>Citrus - 귤속</td>
                 </tr>
                 <tr>
                     <td>과(科)</td>
-                    <td><b>Fabaceae</b>- 콩과</td>
+                    <td>Rutaceae - 운향과</td>
                 </tr>
                 <tr>
                     <td>목(目)</td>
-                    <td><b>Fabales</b> - 콩목</td>
+                    <td>Sapindales - 무환자나무목</td>
                 </tr>
                 <tr>
                     <td>강(綱)</td>
-                    <td><b>Magnoliopsida</b> - 목련강, 속씨식물문</td>
+                    <td>Eudicots - 쌍떡잎식물강</td>
                 </tr>
                 <tr>
                     <td>문(門)</td>
-                    <td><b>Tracheophyta</b> - 관속식물, 관다발식물</td>
+                    <td>Angiosperms - 속씨식물문</td>
                 </tr>
             </table>
         </div>
         <div class="info-section" style="flex: 1;">
-            <h3><img src="/static/img/Key facts.png" alt="Key Facts Icon">설명</h3>
-            <p>콩(Glycine max)은 동아시아에서 중요한 작물로 오래전부터 경작되었다.<br>
-                한국에는 기원전 1000년경에 재배된 것으로 알려져 있다. 속명은 달콤함을 듯하는 그리스어 glykos에서 유래했다.<br>
-                콩은 상당량의 식이 미네랄, 비타민 B 등을 함유하고 있다. 농장 가축에겐 중요한 단백질 공급원이다.<br>
-                박데리아, 곰팡이, 기생균 등에 취약하다.</p>
+            <h3><img src="/static/img/book.png" alt="book Icon">설명</h3>
+            <p>오렌지는 주황색 구 모양 과일로, 껍질이 두껍고 단단해 손으로 까기 어렵지만 주스로 많이 사용됩니다. 비타민 C와 섬유질이 풍부하며, 신맛보다 단맛과 쓴맛이 강조됩니다.
+                과육은 상쾌한 맛을 지니고 있으며, 주스로 만들어 먹거나 오렌지 치킨, 피자와 같은 다양한 요리에 활용됩니다. 또한, 시트러스 향이 강해 향수 원료로도 자주 사용되며,
+                대표적으로 조말론의 오렌지 블라썸, 세르주루텐의 오랑쥬가 있습니다.</p>
         </div>
     </div>
 
@@ -175,17 +207,18 @@
                     <td>침입성으로 보고되지 않음</td>
                 </tr>
                 <tr>
-                    <td>종류</td>
-                    <td>허브</td>
-                </tr>
-                <tr>
-                    <td>수명</td>
-                    <td>일년생</td>
-                </tr>
-                <tr>
-                    <td>재배 시기</td>
-                    <td>봄, 초여름</td>
-                </tr>
+                <td>종류</td>
+                <td>나무</td>
+            </tr>
+            <tr>
+                <td>수명</td>
+                <td>다년생</td>
+            </tr>
+            <tr>
+                <td>재배 시기</td>
+                <td>봄, 여름</td>
+            </tr>
+
             </table>
         </div>
 
@@ -204,19 +237,20 @@
                     </tr>
                     <tr>
                         <td>식물 높이</td>
-                        <td>61 ~ 183 cm</td>
+                        <td>4 ~ 10m</td>
                     </tr>
                     <tr>
                         <td>꼭대기 지름</td>
-                        <td>30 ~ 38 cm</td>
+                        <td> 8 ~ 10 cm</td>
+                        </td>
                     </tr>
                     <tr>
                         <td>잎 색깔</td>
                         <td>
-                            <span class="color-circle" style="background-color: green;"></span>
-                        </td>
-                        
+                            <span style="display: inline-block; width: 12px; height: 12px; background-color: green; border-radius: 50%; border: 1px solid #ccc;"></span>
+                        </td>                        
                     </tr>
+
                 </table>
             </div>
             <div class="tab-content">
@@ -227,16 +261,19 @@
                     </tr>
                     <tr>
                         <td>개화 시기</td>
-                        <td>늦은 봄, 초여름, 한여름</td>
+                        <td>봄</td>
                     </tr>
                     <tr>
                         <td>꽃 지름</td>
-                        <td>2.5cm</td>
+                        <td>2.5 ~ 5cm</td>
                     </tr>
                     <tr>
                         <td>꽃 색깔</td>
-                        <td>흑색</td>
+                        <td>
+                            <span style="display: inline-block; width: 12px; height: 12px; background-color: white; border-radius: 50%; border: 1px solid #ccc;"></span>
+                        </td>
                     </tr>
+
                 </table>
             </div>
             <div class="tab-content">
@@ -247,12 +284,15 @@
                     </tr>
                     <tr>
                         <td>수확 시기</td>
-                        <td>여름, 가을</td>
+                        <td>겨울, 초봄</td>
                     </tr>
                     <tr>
                         <td>과일 색</td>
-                        <td>보라색</td>
+                        <td>
+                            <span style="display: inline-block; width: 12px; height: 12px; background-color: orange; border-radius: 50%;"></span>
+                        </td>
                     </tr>
+
                 </table>
             </div>
         </div>
@@ -263,42 +303,32 @@
     <div class="info-section" style="flex: 1;">
         <h3><img src="/static/img/disease.png" alt="Disease Icon">병해충 및 질병</h3>
         <div class="scroll-container">
-            <div class="scroll-item" onclick="showDiseaseInfo('깨씨무늬병')">
-                <img src="/static/img/corn/corn_disease1.jpg" alt="Disease 1">
-                <p>잎벌레</p>
+            <div class="scroll-item" onclick="showDiseaseInfo('오렌지곰팡이병')">
+                <img src="/static/img/orange/orange_disease1.jpg" alt="Disease 1">
+                <p>오렌지곰팡이병</p>
             </div>
-            <div class="scroll-item">
-                <img src="/static/img/disease2.png" alt="Disease 2">
-                <p>롱혼 딱정벌레</p>
+            <div class="scroll-item" onclick="showDiseaseInfo('흰가루병')">
+                <img src="/static/img/orange/orange_disease2.jpg" alt="Disease 2">
+                <p>흰가루병</p>
             </div>
-            <div class="scroll-item">
-                <img src="/static/img/disease3.png" alt="Disease 3">
-                <p>애벌레</p>
+            <div class="scroll-item" onclick="showDiseaseInfo('흑반병')">
+                <img src="/static/img/orange/orange_disease3.jpg" alt="Disease 3">
+                <p>흑반병</p>
             </div>
-            <div class="scroll-item">
-                <img src="/static/img/disease4.png" alt="Disease 4">
-                <p>과일 시들음</p>
-            </div>
-            <div class="scroll-item">
-                <img src="/static/img/disease5.png" alt="Disease 5">
-                <p>수액 흡수 곤충</p>
-            </div>
-            <div class="scroll-item">
-                <img src="/static/img/disease6.png" alt="Disease 6">
-                <p>열매 썩음병</p>
-            </div>
-            <div class="scroll-item">
-                <img src="/static/img/disease7.png" alt="Disease 7">
-                <p>갈색 반점</p>
+            <div class="scroll-item" onclick="showDiseaseInfo('뿌리썩음병')">
+                <img src="/static/img/orange/orange_disease4.jpg" alt="Disease 4">
+                <p>뿌리썩음병</p>
             </div>
         </div>
         <div class="disease-info"></div>
     </div>
     <div class="info-section" style="flex: 1;">
-        <h3><img src="/static/img/facts.png" alt="Interesting Facts Icon">흥미로운 사실</h3>
-        <p>옥수수는 세계에서 가장 널리 재배되는 작물 중 하나로, 다양한 기후와 환경에서 자랄 수 있는 강한 적응력을 가지고 있습니다. 옥수수의 품종은 수백 가지에 달하며, 이는 다양한 용도와 환경 요구를 충족시키기 위해 개발되었습니다.</p>
+        <h3><img src="/static/img/happy.png" alt="Interesting Facts Icon">흥미로운 사실</h3>
+        <p>복숭아나무는 석기 시대부터 그 열매를 위해 재배되어 왔으며, 기원전 6000년경에 중국에서 재배되었을 가능성이 있습니다. 복숭아는
+            중국 문학과 신화에서 오랜 의미를 지니며, 고대 문서에 언급되었고 마법적인 힘을 가진 것으로 여겨졌습니다. 오늘날에도 중국은 복숭아 생산에서 세계를 선도하고 있습니다.</p>
     </div>
 </div>
+
 
 </body>
 </html>

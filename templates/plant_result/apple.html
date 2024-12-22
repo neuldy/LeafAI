@@ -160,7 +160,7 @@
         <strong>Plant and Disease:</strong> {{ result }}
     </p>
     <p style="margin: 0;">
-        <strong>Confidence:</strong> {{ confidence | default(0) * 100 | round(2) }}%
+        <strong>Confidence:</strong> {{ confidence | default(0) | round(2) }}%
     </p>
 </div>
 </div>

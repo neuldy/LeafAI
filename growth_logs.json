@@ -1,22 +1,24 @@
 [
     {
-        "crop_name": "장미",
-        "watering": "123",
-        "weather": "unknown",
-        "notes": "123",
-        "temperature": 36.09,
-        "ppfd": 607.04,
-        "date": "2024-12-21",
-        "humidity": "123"
+        "crop_name": "Romaine",
+        "date": "2024-12-23",
+        "temperature": "36.18",
+        "ppfd": "434.51",
+        "water": "많음",
+        "humidity": "80",
+        "weather": "우중충해요",
+        "notes": "5",
+        "photo": "Romaine03.jpg"
     },
     {
         "crop_name": "잎브로콜리",
-        "watering": "두컵 정도 줬어요",
-        "weather": "우중충해요",
-        "notes": "메모 ",
-        "temperature": 36.04,
-        "ppfd": 605.82,
-        "date": "2024-12-21",
-        "humidity": "아마 8~90%"
+        "date": "2024-12-08",
+        "temperature": "36.15",
+        "ppfd": "441.84",
+        "water": "500mL",
+        "humidity": "80",
+        "weather": "맑음",
+        "notes": "ㅇ",
+        "photo": "dhrtntn.jpg"
     }
 ]

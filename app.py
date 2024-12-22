@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, Response, jsonify
+from flask import Flask, render_template, request, redirect, url_for, Response, jsonify, send_from_directory
 import os
 import json
 from tensorflow.keras.models import load_model
@@ -381,80 +381,17 @@ GROWTH_LOG_FILE = 'growth_logs.json'
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'bmp'}
 from datetime import datetime
 
-@app.route('/growth_log', methods=['GET', 'POST'])
-def growth_log():
-    try:
-        if arduino:
-            arduino.write(b'S')  # Send 'S' to Arduino to request sensor data
-            time.sleep(1)
-            data = arduino.readline().decode('utf-8').strip()
-            if data:
-                # Parse Arduino data, e.g., "Temperature: 25.50 °C, PPFD: 150.30 μmol/m²/s"
-                parts = data.split(", ")
-                temperature_part = parts[0].split(":")[1].strip().replace("°C", "").strip()
-                ppfd_part = parts[1].split(":")[1].strip().replace("μmol/m²/s", "").strip()
-                temperature = float(temperature_part)
-                ppfd = float(ppfd_part)
-            else:
-                temperature, ppfd = None, None
-        else:
-            temperature, ppfd = None, None
-
-    except Exception as e:
-        print(f"[ERROR] Failed to read from Arduino: {e}")
-        temperature, ppfd = None, None
-
-    if request.method == 'POST':
-        crop_name = request.form['crop_name']
-        # Remove the date handling here as we no longer need it
-        # We don't use date from the form anymore, as requested
-        
-        watering = request.form.get('water', 'unknown')  # 기본값 설정
-        humidity = request.form.get('humidity', 'unknown')  # 기본값 설정
-        weather = request.form.get('weather', 'unknown')  # 기본값 설정
-        notes = request.form['notes']
-
-        # Save the log entry with temperature and PPFD
-        growth_log_entry = {
-            'crop_name': crop_name,
-            'watering': watering,
-            'weather': weather,
-            'notes': notes,
-            'temperature': temperature,
-            'ppfd': ppfd,
-            'date': datetime.now().strftime("%Y-%m-%d"),
-            'humidity': humidity
-        }
-
-        # Read or initialize growth logs
-        if os.path.exists(GROWTH_LOG_FILE):
-            with open(GROWTH_LOG_FILE, 'r', encoding='utf-8') as f:
-                growth_logs = json.load(f)
-        else:
-            growth_logs = []
-
-        growth_logs.append(growth_log_entry)
-
-        # Save updated logs
-        with open(GROWTH_LOG_FILE, 'w', encoding='utf-8') as f:
-            json.dump(growth_logs, f, ensure_ascii=False, indent=4)
-
-        return redirect(url_for('view_growth_logs'))
-
-    # Removed the logic for passing today's date to the template, since it's not needed
-    return render_template('growth_log.html', temperature=temperature, ppfd=ppfd)
-
 @app.route('/view_growth_logs', methods=['GET'])
 def view_growth_logs():
-    search_query = request.args.get('q', '').strip()  # 검색어 가져오기
+    search_query = request.args.get('q', '').strip()
     growth_logs = []
 
-    # JSON 파일에서 데이터 읽기
+    # JSON 파일 읽기
     if os.path.exists(GROWTH_LOG_FILE):
         with open(GROWTH_LOG_FILE, 'r', encoding='utf-8') as f:
             growth_logs = json.load(f)
 
-    # 검색어가 있을 경우 필터링
+    # 검색어 필터링
     if search_query:
         filtered_logs = [
             log for log in growth_logs
@@ -462,11 +399,9 @@ def view_growth_logs():
                search_query.lower() in log['notes'].lower()
         ]
     else:
-        filtered_logs = growth_logs  # 검색어가 없으면 전체 데이터 사용
+        filtered_logs = growth_logs
 
     return render_template('view_growth_logs.html', growth_logs=filtered_logs, search_query=search_query)
-
-
 
 @app.route('/get_temperature', methods=['GET'])
 def get_temperature():
@@ -475,32 +410,149 @@ def get_temperature():
             arduino.write(b'S')  # Arduino로 데이터 요청
             time.sleep(1)
             data = arduino.readline().decode('utf-8').strip()  # Arduino에서 데이터 수신
-            print(f"[DEBUG] Raw data from Arduino: {data}")  # 디버깅용 출력
+            print(f"[DEBUG] Raw data from Arduino: {data}")
 
             if data:
-                try:
-                    # 데이터 파싱
-                    # 예: "Temperature: 25.50 °C, PPFD: 150.30 μmol/m²/s"
-                    parts = data.split(", ")
-                    temperature_part = parts[0].split(":")[1].strip().replace("°C", "").strip()
-                    ppfd_part = parts[1].split(":")[1].strip().replace("μmol/m²/s", "").strip()
-
-                    # 온도와 조도 값을 float으로 변환
-                    temperature = float(temperature_part)
-                    ppfd = float(ppfd_part)
-
-                    # JSON 형태로 반환
-                    return jsonify({"temperature": f"{temperature:.2f} °C", "ppfd": f"{ppfd:.2f} μmol/m²/s"})
-                except (IndexError, ValueError) as parse_error:
-                    print(f"[ERROR] Data parsing failed: {parse_error}")
-                    return jsonify({"error": "Data parsing failed", "message": str(parse_error)}), 400
+                # 데이터 파싱
+                parts = data.split(", ")
+                temperature = float(parts[0].split(":")[1].strip().replace("°C", ""))
+                ppfd = float(parts[1].split(":")[1].strip().replace("μmol/m²/s", ""))
+                return {"temperature": f"{temperature:.2f} °C", "ppfd": f"{ppfd:.2f} μmol/m²/s"}
             else:
-                return jsonify({"error": "No data received from Arduino"}), 400
+                return {"error": "No data received from Arduino"}
         else:
-            return jsonify({"error": "Arduino not connected"}), 500
+            return {"error": "Arduino not connected"}
     except Exception as e:
         print(f"[ERROR] Exception occurred: {e}")
-        return jsonify({"error": "An error occurred", "message": str(e)}), 500
+        return {"error": str(e)}
+
+from datetime import datetime
+import pytz
+import os
+from werkzeug.utils import secure_filename
+
+UPLOAD_FOLDER = 'static/uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/static/uploads/<filename>')
+def uploaded_file(filename):
+    return send_from_directory(app.config['UPLOAD_FOLDER'], filename)
+
+
+@app.route('/growth_log', methods=['GET', 'POST'])
+def growth_log():
+    # 기본 데이터 초기화
+    temperature, ppfd = None, None
+    try:
+        if arduino:  # Arduino에서 데이터 읽기
+            arduino.write(b'S')
+            time.sleep(1)
+            data = arduino.readline().decode('utf-8').strip()
+            if data:
+                parts = data.split(", ")
+                temperature = float(parts[0].split(":")[1].strip().replace("°C", ""))
+                ppfd = float(parts[1].split(":")[1].strip().replace("μmol/m²/s", ""))
+    except Exception as e:
+        print(f"[ERROR] Failed to fetch temperature and PPFD: {e}")
+
+    if request.method == 'POST':
+        # 입력 데이터 수집
+        crop_name = request.form['crop_name']
+        date = request.form['date']
+        water = request.form['water']
+        humidity = request.form['humidity']
+        weather = request.form['weather']
+        notes = request.form['notes']
+        photo = request.files['photo']
+
+        photo_filename = None
+        if photo and allowed_file(photo.filename):
+            photo_filename = secure_filename(photo.filename)
+            photo.save(os.path.join(app.config['UPLOAD_FOLDER'], photo_filename))
+
+        # JSON 파일 업데이트
+        if os.path.exists(GROWTH_LOG_FILE):
+            with open(GROWTH_LOG_FILE, 'r', encoding='utf-8') as f:
+                growth_logs = json.load(f)
+        else:
+            growth_logs = []
+
+        growth_logs.append({
+            'crop_name': crop_name,
+            'date': date,
+            'temperature': temperature,
+            'ppfd': ppfd,
+            'water': water,
+            'humidity': humidity,
+            'weather': weather,
+            'notes': notes,
+            'photo': photo_filename
+        })
+
+        with open(GROWTH_LOG_FILE, 'w', encoding='utf-8') as f:
+            json.dump(growth_logs, f, ensure_ascii=False, indent=4)
+
+        return redirect(url_for('view_growth_logs'))
+
+    # GET 요청 시 기본 폼 렌더링
+    return render_template('growth_log.html', temperature=temperature, ppfd=ppfd, log_id=None)
+
+
+@app.route('/edit_growth_log/<int:log_id>', methods=['GET', 'POST'])
+def edit_growth_log(log_id):
+    if os.path.exists(GROWTH_LOG_FILE):
+        with open(GROWTH_LOG_FILE, 'r', encoding='utf-8') as f:
+            growth_logs = json.load(f)
+    else:
+        return redirect(url_for('view_growth_logs'))
+
+    if log_id < 0 or log_id >= len(growth_logs):
+        return redirect(url_for('view_growth_logs'))
+
+    if request.method == 'POST':
+        # 기존 사진 유지 또는 새로운 사진 업로드
+        uploaded_photo = request.files.get('photo')
+        if uploaded_photo and uploaded_photo.filename != '':
+            filename = secure_filename(uploaded_photo.filename)
+            uploaded_photo.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            growth_logs[log_id]['photo'] = filename
+        else:
+            growth_logs[log_id]['photo'] = growth_logs[log_id].get('photo', None)  # 기존 사진 유지
+
+        # 나머지 데이터 업데이트
+        growth_logs[log_id].update({
+            'crop_name': request.form['crop_name'],
+            'date': request.form['date'],
+            'temperature': request.form['temperature'],
+            'ppfd': request.form['ppfd'],
+            'water': request.form['water'],
+            'humidity': request.form['humidity'],
+            'weather': request.form['weather'],
+            'notes': request.form['notes']
+        })
+
+        with open(GROWTH_LOG_FILE, 'w', encoding='utf-8') as f:
+            json.dump(growth_logs, f, ensure_ascii=False, indent=4)
+
+        return redirect(url_for('view_growth_logs'))
+
+    log_to_edit = growth_logs[log_id]
+    return render_template(
+        'growth_log.html',
+        log_id=log_id,
+        crop_name=log_to_edit.get('crop_name', ''),
+        date=log_to_edit.get('date', ''),
+        temperature=log_to_edit.get('temperature', ''),
+        ppfd=log_to_edit.get('ppfd', ''),
+        water=log_to_edit.get('water', ''),
+        humidity=log_to_edit.get('humidity', ''),
+        weather=log_to_edit.get('weather', ''),
+        notes=log_to_edit.get('notes', ''),
+        photo=log_to_edit.get('photo', None)
+    )
 
 @app.route('/delete_growth_log/<int:log_id>', methods=['POST'])
 def delete_growth_log(log_id):
@@ -510,14 +562,20 @@ def delete_growth_log(log_id):
     else:
         growth_logs = []
 
-    # 삭제할 로그를 제외한 나머지 로그만 저장
-    growth_logs = [log for idx, log in enumerate(growth_logs) if idx != log_id]
+    # log_id 범위 확인
+    if log_id < 0 or log_id >= len(growth_logs):
+        return jsonify({"error": "Invalid log ID"}), 400
 
-    # 업데이트된 로그를 저장
+    # 해당 로그 삭제
+    growth_logs.pop(log_id)
+
+    # 업데이트된 로그 저장
     with open(GROWTH_LOG_FILE, 'w', encoding='utf-8') as f:
         json.dump(growth_logs, f, ensure_ascii=False, indent=4)
 
     return redirect(url_for('view_growth_logs'))
+
+
 
 from markupsafe import Markup
 
@@ -529,7 +587,6 @@ def highlight(text, search_query):
         search_query, f"<span class='highlight'>{search_query}</span>"
     )
     return Markup(highlighted)
-
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

@@ -38,7 +38,7 @@
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             width: 90%;
             max-width: 800px;
-            margin-top: 90px; /* Adjusted to account for fixed header */
+            margin-top: 90px;
             position: relative;
         }
         h1 {
@@ -100,6 +100,22 @@
             transform: scale(1.05);
             background: linear-gradient(to right, #feb47b, #ff7e5f);
         }
+        .capture-btn {
+            background: linear-gradient(to right, #42a5f5, #64b5f6);
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            border-radius: 20px;
+            padding: 10px 20px;
+            display: inline-block;
+            margin-top: 10px;
+            transition: background-color 0.3s;
+        }
+        .capture-btn:hover {
+            background: linear-gradient(to right, #64b5f6, #42a5f5);
+        }
     </style>
 </head>
 <body>
@@ -108,51 +124,48 @@
         <a href="/capture">LeafAI</a>
         <a href="/cctv">CCTV</a>
         <a href="/search">Plant Information</a>
-        <a href="/view_growth_logs">Blog</a> <!-- Blog link added here -->
+        <a href="/view_growth_logs">Blog</a>
     </header>
     <div class="container">
         <h1>생장일지</h1>
-        <form action="{{ url_for('growth_log') }}" method="POST">
+        <form action="{{ url_for('edit_growth_log', log_id=log_id) if log_id is not none else url_for('growth_log') }}" method="POST" enctype="multipart/form-data">
             <div class="grid-container">
-
                 <div class="grid-item">
                     <label for="crop_name">작물 이름:</label>
-                    <input type="text" id="crop_name" name="crop_name" required>
+                    <input type="text" id="crop_name" name="crop_name" value="{{ crop_name if crop_name else '' }}" required>
                 </div>
                 <div class="grid-item">
                     <label for="date">날짜:</label>
-                    <input type="date" id="date" name="date" required>
-
-                    <script>
-                    // 페이지 로드 후, 현재 날짜를 자동으로 입력
-                    document.getElementById('date').value = new Date().toISOString().split('T')[0];
-                    </script>
+                    <input type="date" id="date" name="date" value="{{ date }}" required>
                 </div>
                 <div class="grid-item">
-                    <label for="temperature">온도 (°C)</label>
-                    <input type="text" id="temperature" name="temperature" value="{{ temperature if temperature else '' }}" readonly>
+                    <label for="temperature">온도 (°C):</label>
+                    <input type="text" id="temperature" name="temperature" value="{{ temperature }}" readonly>
                 </div>
                 <div class="grid-item">
-                    <label for="ppfd">빛의 양 (PPFD, μmol/m²/s)</label>
-                    <input type="text" id="ppfd" name="ppfd" value="{{ ppfd if ppfd else '' }}" readonly>
-                </div>
+                    <label for="ppfd">빛의 양 (PPFD, μmol/m²/s):</label>
+                    <input type="text" id="ppfd" name="ppfd" value="{{ ppfd }}" readonly>
+                </div>                
                 <div class="grid-item">
                     <label for="water">물의 양:</label>
-                    <input type="text" id="water" name="water" required>
-                </div>
-                
-                <div class="grid-item">
-                    <label for="humidity">습도 (%)</label>
-                    <input type="text" id="humidity" name="humidity" required>
+                    <input type="text" id="water" name="water" value="{{ water if water else '' }}" required>
                 </div>
                 <div class="grid-item">
-                    <label for="weather">날씨</label>
-                    <input type="text" id="weather" name="weather" required>
+                    <label for="humidity">습도 (%):</label>
+                    <input type="text" id="humidity" name="humidity" value="{{ humidity if humidity else '' }}" required>
                 </div>
-                
+                <div class="grid-item">
+                    <label for="weather">날씨:</label>
+                    <input type="text" id="weather" name="weather" value="{{ weather if weather else '' }}" required>
+                </div>
+                <div class="grid-item">
+                    <label for="photo">사진 업로드:</label>
+                    <input type="file" id="photo" name="photo" accept="image/*">
+                    <a href="/capture" class="capture-btn">사진 캡처</a>
+                </div>
             </div>
             <label for="notes">상세 정보:</label>
-            <textarea id="notes" name="notes" rows="5" placeholder="메모를 입력하세요..."></textarea>
+            <textarea id="notes" name="notes" rows="5">{{ notes if notes else '' }}</textarea>
             <button type="submit" class="submit-btn">저장</button>
         </form>
     </div>
